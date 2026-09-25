@@ -1,5 +1,6 @@
 import "./globals.css";
 import { GoogleAdSense } from "@/components/ads/GoogleAdSense";
+import { Providers } from "@/components/auth/Providers";
 import Script from "next/script";
 export const metadata = {
   title: "CVPair — Build Your Professional CV in Minutes",
@@ -33,7 +34,9 @@ export default function RootLayout({ children }) {
           gtag('config', 'G-H748BLF4YL');
         `}
       </Script>
-      <body suppressHydrationWarning>{children}</body>
+      <body suppressHydrationWarning>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

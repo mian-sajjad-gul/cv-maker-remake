@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { UserNav } from "@/components/auth/UserNav";
 
 export function Header() {
   return (
@@ -28,10 +29,11 @@ export function Header() {
           </Link>
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <UserNav />
           <Link
             href="/resume"
-            className="rounded-full bg-slate-950 px-5 py-2 text-sm font-bold text-white hover:bg-slate-700"
+            className="rounded-full bg-slate-950 px-5 py-2 text-xs sm:text-sm font-bold text-white hover:bg-slate-700 shadow-sm transition"
           >
             Build Your CV
           </Link>

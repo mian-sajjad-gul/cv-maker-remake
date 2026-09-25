@@ -7,6 +7,7 @@ import { ResumePreview } from "@/components/ResumePreview";
 import { CoverLetterEditor } from "@/components/CoverLetterEditor";
 import { Toolbar } from "@/components/Toolbar";
 import { ResumeManager } from "@/components/ResumeManager";
+import { SendCvModal } from "@/components/email/SendCvModal";
 import { Footer } from "@/components/home/Footer";
 import { Header } from "@/components/home/Header";
 import { AdBlock } from "@/components/ads/AdBlock";
@@ -34,6 +35,7 @@ function ResumeBuilderContent() {
 
   const [tab, setTab] = useState("resume");
   const [managerOpen, setManagerOpen] = useState(false);
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
 
   // Keyboard shortcuts for undo/redo
   useEffect(() => {
@@ -69,6 +71,7 @@ function ResumeBuilderContent() {
         canRedo={canRedo}
         onOpenManager={() => setManagerOpen(true)}
         resumeName={activeResume?.name}
+        onOpenEmailModal={() => setEmailModalOpen(true)}
       />
 
       <div className="mx-auto grid max-w-[1600px] gap-3 px-4 py-6 lg:grid-cols-[440px_minmax(0,1fr)]">
@@ -149,6 +152,13 @@ function ResumeBuilderContent() {
           onClose={() => setManagerOpen(false)}
         />
       )}
+
+      {/* Send CV by Email modal (Resend integrated) */}
+      <SendCvModal
+        data={data}
+        isOpen={emailModalOpen}
+        onClose={() => setEmailModalOpen(false)}
+      />
     </main>
   );
 }

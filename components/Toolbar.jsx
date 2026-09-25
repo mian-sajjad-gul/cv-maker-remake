@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { encodeShareData } from "@/lib/utils";
+import { useAuth } from "@/lib/authContext";
+import { UserNav } from "@/components/auth/UserNav";
+import { Mail, Printer, Share2, Download, CheckCircle2 } from "lucide-react";
 
 const ATS_CRITERIA = [
   { key: "name", label: "Full name", check: (d) => !!d.personal.name },
@@ -26,7 +29,17 @@ function IconButton({ onClick, title, children, className = "" }) {
   );
 }
 
-export function Toolbar({ data, onUndo, onRedo, canUndo, canRedo, onOpenManager, resumeName }) {
+export function Toolbar({
+  data,
+  onUndo,
+  onRedo,
+  canUndo,
+  canRedo,
+  onOpenManager,
+  resumeName,
+  onOpenEmailModal,
+}) {
+  const { user, openAuthModal } = useAuth();
   const [atsOpen, setAtsOpen] = useState(false);
   const [shareToast, setShareToast] = useState(false);
 
@@ -41,6 +54,28 @@ export function Toolbar({ data, onUndo, onRedo, canUndo, canRedo, onOpenManager,
       setShareToast(true);
       setTimeout(() => setShareToast(false), 2500);
     });
+  }
+
+  function handleDownload() {
+    if (user) {
+      window.print();
+    } else {
+      openAuthModal(() => {
+        setTimeout(() => {
+          window.print();
+        }, 300);
+      });
+    }
+  }
+
+  function handleEmail() {
+    if (user) {
+      onOpenEmailModal?.();
+    } else {
+      openAuthModal(() => {
+        onOpenEmailModal?.();
+      });
+    }
   }
 
   return (
@@ -129,7 +164,7 @@ export function Toolbar({ data, onUndo, onRedo, canUndo, canRedo, onOpenManager,
             </IconButton>
           </div>
 
-          {/* Share */}
+          {/* Share Link */}
           <div className="relative">
             <button
               type="button"
@@ -137,10 +172,8 @@ export function Toolbar({ data, onUndo, onRedo, canUndo, canRedo, onOpenManager,
               title="Copy shareable link"
               className="flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
             >
-              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-              </svg>
-              Share
+              <Share2 className="h-3.5 w-3.5 text-slate-500" />
+              <span>Share</span>
             </button>
             {shareToast && (
               <div className="absolute right-0 top-10 z-20 whitespace-nowrap rounded-xl bg-slate-900 px-3 py-1.5 text-xs font-bold text-white shadow-lg">
@@ -149,14 +182,32 @@ export function Toolbar({ data, onUndo, onRedo, canUndo, canRedo, onOpenManager,
             )}
           </div>
 
-          {/* Print */}
+          {/* Email CV via Resend */}
           <button
             type="button"
-            className="rounded-full bg-slate-900 px-4 py-2 text-xs font-bold text-white transition hover:bg-slate-700"
-            onClick={() => window.print()}
+            onClick={handleEmail}
+            title="Send CV via email"
+            className="flex items-center gap-1.5 rounded-full border border-indigo-200 bg-indigo-50/70 px-3.5 py-1.5 text-xs font-bold text-indigo-700 transition hover:bg-indigo-100 hover:border-indigo-300"
           >
-            Print / Save PDF
+            <Mail className="h-3.5 w-3.5 text-indigo-600" />
+            <span>Email CV</span>
           </button>
+
+          {/* Print / Save PDF (Auth gated with guest fallback) */}
+          <button
+            type="button"
+            className="flex items-center gap-1.5 rounded-full bg-slate-900 px-4 py-2 text-xs font-bold text-white transition hover:bg-slate-700 shadow-sm active:scale-95"
+            onClick={handleDownload}
+            title="Download high-resolution ATS PDF"
+          >
+            <Download className="h-3.5 w-3.5" />
+            <span>Print / Save PDF</span>
+          </button>
+
+          {/* User profile / Login button */}
+          <div className="ml-1 pl-2 border-l border-slate-200">
+            <UserNav />
+          </div>
         </div>
       </div>
     </div>
