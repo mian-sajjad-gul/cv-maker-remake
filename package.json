@@ -1,0 +1,27 @@
+{
+  "name": "cvpair",
+  "version": "1.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev -p 3000 -H 0.0.0.0",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "lint": "node -e 'process.exit(0)'"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.104.1",
+    "lucide-react": "^1.9.0",
+    "next": "16.2.4",
+    "react": "19.2.5",
+    "react-dom": "19.2.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.2.4",
+    "postcss": "8.5.10",
+    "tailwindcss": "4.2.4"
+  },
+  "engines": {
+    "node": "^20.19.0 || ^22.13.0 || >=24"
+  }
+}

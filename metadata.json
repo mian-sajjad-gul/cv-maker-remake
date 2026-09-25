@@ -1,0 +1,8 @@
+{
+  "name": "CVPair — Professional CV & Resume Builder",
+  "description": "Create, edit, and export job-winning resumes and cover letters with professional ATS-friendly templates, live previews, and instant PDF download.",
+  "version": "1.0.0",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
