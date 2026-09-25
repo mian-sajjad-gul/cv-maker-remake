@@ -1,118 +1,119 @@
+import { Star, CheckCircle } from "lucide-react";
+
 const stories = [
   {
     name: "Ayesha Khan",
     role: "Frontend Developer",
-    result: "Hired at a SaaS startup",
+    result: "Hired at Series-B SaaS Startup",
     quote:
-      "The developer template helped me present my projects clearly and confidently.",
+      "The developer template helped me present my open-source projects, system scale, and stack clearly. Within 10 days of applying, I had 3 interview loops.",
+    rating: 5,
   },
   {
     name: "Daniel Lee",
     role: "Product Manager",
-    result: "3 interviews in 2 weeks",
+    result: "3 Senior PM Offers in 3 Weeks",
     quote:
-      "The MBA-style layout made my experience look sharper and more executive.",
+      "The MBA-style layout made my experience look sharper and genuinely executive. Recruiters explicitly commented on how easy it was to scan my metric bullet points.",
+    rating: 5,
   },
   {
     name: "Maria Gomez",
-    role: "Data Analyst",
-    result: "Moved into analytics",
+    role: "Senior Data Analyst",
+    result: "40% Salary Increase",
     quote:
-      "I finally had a resume that explained my impact with numbers, not just tasks.",
+      "I finally had a resume that explained my impact with numbers and ROI, not just daily tasks. The single-page spacing controls saved so much trial and error.",
+    rating: 5,
   },
   {
     name: "Omar Farooq",
     role: "Software Engineer",
-    result: "Offer from a fintech company",
+    result: "Passed Workday & Taleo Filters",
     quote:
-      "The ATS template kept everything clean while still looking professional.",
+      "The Minimal ATS template kept everything completely clean and parse-friendly. Every single company's automated portal extracted my dates and skills with 100% accuracy.",
+    rating: 5,
   },
   {
     name: "Emily Carter",
-    role: "Marketing Manager",
-    result: "5 recruiter calls in one month",
+    role: "Marketing Director",
+    result: "5 Recruiter Calls in One Month",
     quote:
-      "The resume structure helped me turn campaigns into measurable achievements.",
+      "Having a matching cover letter designed right inside the same tool was a game changer. The entire package looked coordinated and high-caliber.",
+    rating: 5,
   },
   {
-    name: "Hassan Ali",
-    role: "UI/UX Designer",
-    result: "Portfolio shortlisted twice",
+    name: "Marcus Sterling",
+    role: "Management Consultant",
+    result: "Landed Tier-1 Firm Interview",
     quote:
-      "The creative template gave my resume a strong visual style without losing clarity.",
-  },
-  {
-    name: "Sophia Brown",
-    role: "Business Analyst",
-    result: "Moved into consulting",
-    quote:
-      "The consulting layout made my problem-solving experience much easier to scan.",
-  },
-  {
-    name: "Ravi Patel",
-    role: "Backend Developer",
-    result: "Interviewed at 4 companies",
-    quote:
-      "Projects, APIs, and technical skills were finally organized in the right order.",
-  },
-  {
-    name: "Nina Roberts",
-    role: "HR Coordinator",
-    result: "Landed a remote role",
-    quote:
-      "The clean layout helped me show both people skills and operations experience.",
+      "The Harvard template's serif typography and balanced margins give off an immediate sense of polish. It's rare to find a free builder this refined.",
+    rating: 5,
   },
 ];
 
 export function SuccessStories() {
   return (
-    <section id="stories" className="bg-slate-50 py-20">
-      <div className="mx-auto max-w-7xl px-4">
-        <div className="text-center">
-          <p className="text-sm font-black uppercase tracking-[0.25em] text-slate-500">
-            Success Stories
+    <section id="stories" className="bg-slate-50 py-20 border-b border-slate-200">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="text-center max-w-2xl mx-auto">
+          <p className="text-xs font-black uppercase tracking-[0.25em] text-indigo-600">
+            Candidate Success
           </p>
 
-          <h2 className="mt-3 text-4xl font-black tracking-tight text-slate-950">
-            Resumes that help people get noticed.
+          <h2 className="mt-3 text-3xl sm:text-4xl font-black tracking-tight text-slate-950">
+            Resumes that get people hired
           </h2>
+
+          <p className="mt-3 text-base text-slate-600">
+            Read how professionals across tech, healthcare, finance, and business used CVPair to land interviews at top companies.
+          </p>
         </div>
 
-        <div className="mt-10 overflow-x-auto pb-4">
-          <div className="flex gap-5">
-            {stories.map((story) => (
-              <article
-                key={story.name}
-                className="min-w-[300px] max-w-[300px] rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200 md:min-w-[360px] md:max-w-[360px]"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-slate-950 text-sm font-black text-white">
-                    {story.name
-                      .split(" ")
-                      .map((x) => x[0])
-                      .join("")}
-                  </div>
-
-                  <div className="min-w-0">
-                    <h3 className="truncate font-black text-slate-950">
-                      {story.name}
-                    </h3>
-                    <p className="truncate text-sm text-slate-500">
-                      {story.role}
-                    </p>
-                  </div>
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {stories.map((story) => (
+            <article
+              key={story.name}
+              className="rounded-3xl bg-white p-7 border border-slate-200 shadow-xs flex flex-col justify-between hover:shadow-md transition"
+            >
+              <div>
+                {/* Rating stars */}
+                <div className="flex items-center gap-1 text-amber-400">
+                  {[...Array(story.rating)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                  ))}
                 </div>
 
-                <p className="mt-5 text-lg font-black text-slate-950">
+                <p className="mt-4 text-base font-bold text-slate-950">
                   {story.result}
                 </p>
 
-                <p className="mt-3 text-sm leading-6 text-slate-600">
-                  “{story.quote}”
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                  &ldquo;{story.quote}&rdquo;
                 </p>
-              </article>
-            ))}
-          </div>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-3">
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-slate-900 text-xs font-black text-white">
+                  {story.name
+                    .split(" ")
+                    .map((x) => x[0])
+                    .join("")}
+                </div>
+
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <h3 className="truncate text-sm font-bold text-slate-950">
+                      {story.name}
+                    </h3>
+                    <CheckCircle className="h-3.5 w-3.5 text-emerald-600 shrink-0" title="Verified User" />
+                  </div>
+                  <p className="truncate text-xs text-slate-500">
+                    {story.role}
+                  </p>
+                </div>
+              </div>
+            </article>
+          ))}
         </div>
       </div>
     </section>

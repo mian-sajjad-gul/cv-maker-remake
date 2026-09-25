@@ -2,39 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-
-function LazyTemplate({ Component, data }) {
-  const ref = useRef(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "150px" },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <div ref={ref} className="h-[520px] overflow-hidden rounded-2xl bg-white shadow-sm">
-      {visible ? (
-        <div className="origin-top-left scale-[0.48] pointer-events-none">
-          <Component data={data} />
-        </div>
-      ) : (
-        <div className="h-full w-full animate-pulse bg-slate-100" />
-      )}
-    </div>
-  );
-}
+import Link from "next/link";
+import { ArrowRight, Check, Eye } from "lucide-react";
 import { previewResume } from "@/lib/sampleResume";
 import {
   ModernTemplate,
@@ -53,182 +22,275 @@ import {
   MinimalATSTemplate,
 } from "@/components/templates";
 
-const templates = [
+function LazyTemplate({ Component, data }) {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "150px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} className="h-[460px] overflow-hidden rounded-2xl bg-white shadow-2xs border border-slate-100">
+      {visible ? (
+        <div className="origin-top-left scale-[0.44] pointer-events-none p-4">
+          <Component data={data} />
+        </div>
+      ) : (
+        <div className="h-full w-full animate-pulse bg-slate-100" />
+      )}
+    </div>
+  );
+}
+
+const TEMPLATES = [
   {
     key: "modern",
-    name: "Modern",
-    desc: "Clean modern layout for most professionals",
-    tag: "Modern",
+    name: "Modern Professional",
+    category: "modern",
+    desc: "Clean typography and balanced margins. Perfect for corporate and tech careers.",
+    bestFor: "Software engineers, marketing, finance",
     Component: ModernTemplate,
   },
   {
-    key: "classic",
-    name: "Classic",
-    desc: "Traditional serif resume for formal roles",
-    tag: "Classic",
-    Component: ClassicTemplate,
+    key: "minimalAts",
+    name: "Minimal ATS Scanner",
+    category: "ats",
+    desc: "Engineered specifically for automated ATS parsers (Workday, Taleo, Greenhouse).",
+    bestFor: "Large enterprises & government portals",
+    Component: MinimalATSTemplate,
+  },
+  {
+    key: "executive",
+    name: "Executive Leadership",
+    category: "executive",
+    desc: "Authoritative design crafted for VP, Director, and C-Suite career timelines.",
+    bestFor: "Management, VP, directors, executives",
+    Component: ExecutiveTemplate,
+  },
+  {
+    key: "harvard",
+    name: "Harvard Classic",
+    category: "classic",
+    desc: "Traditional serif styling favored by academia, law, and corporate finance.",
+    bestFor: "Consulting, banking, law, academia",
+    Component: HarvardTemplate,
+  },
+  {
+    key: "developer",
+    name: "Developer & Tech",
+    category: "modern",
+    desc: "Emphasizes technical stack, GitHub repos, distributed architecture, and live projects.",
+    bestFor: "Full-stack, DevOps, QA, architects",
+    Component: DeveloperTemplate,
+  },
+  {
+    key: "productManager",
+    name: "Product & Impact",
+    category: "executive",
+    desc: "Metrics-driven framework highlighting user growth, roadmap delivery, and business ROI.",
+    bestFor: "Product managers, product owners, agile coaches",
+    Component: ProductManagerTemplate,
+  },
+  {
+    key: "consulting",
+    name: "Strategy & Consulting",
+    category: "classic",
+    desc: "Razor-sharp structure emphasizing client deliverables, analytics, and business transformation.",
+    bestFor: "Management consultants, analysts, strategists",
+    Component: ConsultingTemplate,
   },
   {
     key: "compact",
-    name: "Compact",
-    desc: "Space-saving layout for one-page resumes",
-    tag: "Compact",
+    name: "Compact 1-Page",
+    category: "compact",
+    desc: "Space-optimized layout engineered to fit high-density careers onto exactly one page.",
+    bestFor: "Students, new graduates, career changers",
     Component: CompactTemplate,
   },
   {
     key: "sidebar",
-    name: "Sidebar",
-    desc: "Strong side column for skills and contact info",
-    tag: "Popular",
+    name: "Two-Column Sidebar",
+    category: "modern",
+    desc: "Distinctive sidebar layout dedicating space to skills, certifications, and languages.",
+    bestFor: "Designers, data analysts, technical specialists",
     Component: SidebarTemplate,
   },
   {
-    key: "executive",
-    name: "Executive",
-    desc: "Premium leadership layout for senior roles",
-    tag: "Senior",
-    Component: ExecutiveTemplate,
-  },
-  {
-    key: "developer",
-    name: "Developer",
-    desc: "Projects-first layout for engineers",
-    tag: "Tech",
-    Component: DeveloperTemplate,
-  },
-  {
-    key: "timeline",
-    name: "Timeline",
-    desc: "Career timeline style with visual hierarchy",
-    tag: "Story",
-    Component: TimelineTemplate,
-  },
-  {
-    key: "creative",
-    name: "Creative",
-    desc: "Visual split layout for portfolios",
-    tag: "Creative",
-    Component: CreativeTemplate,
-  },
-  {
     key: "mba",
-    name: "MBA",
-    desc: "Business school and product manager style",
-    tag: "Business",
+    name: "MBA & Graduate",
+    category: "executive",
+    desc: "Elite business school layout focusing on leadership, quantitative metrics, and education.",
+    bestFor: "MBA graduates, business analysts, founders",
     Component: MBATemplate,
   },
   {
+    key: "creative",
+    name: "Creative Portfolio",
+    category: "modern",
+    desc: "Modern visual hierarchy for designers, writers, and creative directors.",
+    bestFor: "Designers, copywriters, art directors",
+    Component: CreativeTemplate,
+  },
+  {
     key: "europass",
-    name: "Europass",
-    desc: "European profile style with clean sections",
-    tag: "Formal",
+    name: "Europass Standard",
+    category: "classic",
+    desc: "European standard resume format with structured language competency levels.",
+    bestFor: "European union job applications & visas",
     Component: EuropassTemplate,
   },
-  {
-    key: "harvard",
-    name: "Harvard",
-    desc: "Academic and professional classic layout",
-    tag: "Academic",
-    Component: HarvardTemplate,
-  },
-  {
-    key: "consulting",
-    name: "Consulting",
-    desc: "Sharp layout for consulting and strategy roles",
-    tag: "Consulting",
-    Component: ConsultingTemplate,
-  },
-  {
-    key: "productManager",
-    name: "Product Manager",
-    desc: "Impact-focused layout for product roles",
-    tag: "PM",
-    Component: ProductManagerTemplate,
-  },
-  {
-    key: "minimalAts",
-    name: "Minimal ATS",
-    desc: "Simple parser-friendly resume structure",
-    tag: "ATS",
-    Component: MinimalATSTemplate,
-  },
+];
+
+const CATEGORIES = [
+  { id: "all", label: "All Templates" },
+  { id: "ats", label: "ATS Friendly" },
+  { id: "modern", label: "Modern & Tech" },
+  { id: "executive", label: "Executive & Senior" },
+  { id: "classic", label: "Harvard & Classic" },
+  { id: "compact", label: "Compact 1-Page" },
 ];
 
 export function TemplatesShowcase() {
   const router = useRouter();
-  const [visibleCount, setVisibleCount] = useState(6);
+  const [activeCategory, setActiveCategory] = useState("all");
 
-  const visibleTemplates = templates.slice(0, visibleCount);
-  const hasMore = visibleCount < templates.length;
+  const filtered =
+    activeCategory === "all"
+      ? TEMPLATES
+      : TEMPLATES.filter((t) => t.category === activeCategory);
 
   const selectTemplate = (templateKey) => {
-    router.push(`/resume?${templateKey}`);
+    router.push(`/resume?template=${templateKey}`);
   };
+
   return (
-    <section id="templates" className="bg-white py-20">
-      <div className="mx-auto max-w-7xl px-4">
-        <div className="max-w-2xl">
-          <p className="text-sm font-black uppercase tracking-[0.25em] text-slate-500">
-            Templates
-          </p>
+    <section id="templates" className="bg-white py-20 border-b border-slate-200">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="max-w-2xl">
+            <p className="text-xs font-black uppercase tracking-[0.25em] text-indigo-600">
+              Template Gallery
+            </p>
+            <h2 className="mt-3 text-3xl sm:text-4xl font-black tracking-tight text-slate-950">
+              Pick a recruiter-tested resume template
+            </h2>
+            <p className="mt-3 text-base text-slate-600">
+              Every design is crafted by recruitment professionals and tested against real applicant tracking systems. Choose your layout, customize it, and download for free.
+            </p>
+          </div>
 
-          <h2 className="mt-3 text-4xl font-black tracking-tight text-slate-950">
-            Real layouts for real careers.
-          </h2>
-
-          <p className="mt-4 text-slate-600">
-            Choose templates that change layout, section placement, hierarchy,
-            and style — not just fonts.
-          </p>
+          <Link
+            href="/resume"
+            className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-6 py-3 text-xs sm:text-sm font-bold text-white hover:bg-slate-800 shadow-sm transition shrink-0"
+          >
+            <span>Open Builder Directly</span>
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
 
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {visibleTemplates.map(({ key, name, desc, tag, Component }) => {
-            const data = {
-              ...previewResume,
-              template: key,
-            };
-
+        {/* Filter Tabs (Interactive Segmented Bar) */}
+        <div className="mt-10 flex flex-wrap items-center gap-1.5 p-1.5 bg-slate-100 rounded-2xl max-w-fit">
+          {CATEGORIES.map((cat) => {
+            const isActive = activeCategory === cat.id;
             return (
               <button
-                key={key}
+                key={cat.id}
                 type="button"
-                onClick={() => selectTemplate(key)}
-                className="group text-left"
+                onClick={() => setActiveCategory(cat.id)}
+                className={`rounded-xl px-4 py-2 text-xs font-bold transition ${
+                  isActive
+                    ? "bg-white text-slate-950 shadow-xs"
+                    : "text-slate-600 hover:text-slate-950 hover:bg-white/50"
+                }`}
               >
-                <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5 transition hover:-translate-y-1 hover:shadow-xl">
-                  <LazyTemplate Component={Component} data={data} />
-
-                  <div className="mt-5 flex items-start justify-between gap-4">
-                    <div>
-                      <h3 className="text-lg font-black text-slate-950">
-                        {name}
-                      </h3>
-
-                      <p className="mt-1 text-sm text-slate-600">{desc}</p>
-                    </div>
-
-                    <span className="shrink-0 rounded-full bg-slate-900 px-3 py-1 text-xs font-bold text-white">
-                      {tag}
-                    </span>
-                  </div>
-                </div>
+                {cat.label}
               </button>
             );
           })}
         </div>
 
-        {hasMore && (
-          <div className="mt-10 flex justify-center">
-            <button
-              type="button"
-              onClick={() => setVisibleCount((count) => count + 6)}
-              className="rounded-full bg-slate-900 px-6 py-3 text-sm font-black text-white transition hover:bg-slate-700"
-            >
-              Load More Templates
-            </button>
-          </div>
-        )}
+        {/* Template Grid */}
+        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {filtered.map((item) => {
+            const sampleData = {
+              ...previewResume,
+              template: item.key,
+            };
+
+            return (
+              <div
+                key={item.key}
+                className="group relative rounded-3xl border border-slate-200 bg-slate-50/60 p-5 hover:bg-white hover:border-slate-300 hover:shadow-xl transition-all duration-200 flex flex-col justify-between"
+              >
+                <div>
+                  {/* Preview Container */}
+                  <div className="relative overflow-hidden rounded-2xl bg-white shadow-2xs">
+                    <LazyTemplate Component={item.Component} data={sampleData} />
+
+                    {/* Hover overlay CTA */}
+                    <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 backdrop-blur-[2px]">
+                      <button
+                        type="button"
+                        onClick={() => selectTemplate(item.key)}
+                        className="rounded-full bg-white px-5 py-2.5 text-xs font-bold text-slate-950 shadow-lg hover:bg-slate-100 transition active:scale-95 flex items-center gap-1.5"
+                      >
+                        <span>Use This Template</span>
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Template Meta (Zero-pill clean text) */}
+                  <div className="mt-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-base font-bold text-slate-950">
+                        {item.name}
+                      </h3>
+                      <span className="text-[11px] font-mono text-emerald-700 font-bold">
+                        ATS Verified
+                      </span>
+                    </div>
+
+                    <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
+                      {item.desc}
+                    </p>
+
+                    <div className="mt-3 flex items-center gap-2 text-[11px] text-slate-500">
+                      <span className="font-semibold text-slate-700">Best for:</span>
+                      <span className="truncate">{item.bestFor}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom button */}
+                <div className="mt-5 pt-4 border-t border-slate-200/80">
+                  <button
+                    type="button"
+                    onClick={() => selectTemplate(item.key)}
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-white border border-slate-200 py-2.5 text-xs font-bold text-slate-900 group-hover:bg-slate-950 group-hover:text-white group-hover:border-slate-950 transition"
+                  >
+                    <span>Customize in Editor</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
