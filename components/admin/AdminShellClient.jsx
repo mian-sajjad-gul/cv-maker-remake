@@ -31,7 +31,7 @@ const TAB_TITLES = {
 export function AdminShellClient({
   activeTab = "overview",
   stats = {},
-  adminEmail = "admin@cvpair.com",
+  adminEmail = "adminEmail@adminEmail.com",
   children,
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -119,7 +119,9 @@ export function AdminShellClient({
                   Admin
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 font-medium">Control Center</p>
+              <p className="text-[11px] text-slate-400 font-medium">
+                Control Center
+              </p>
             </div>
           </Link>
         </div>
@@ -154,7 +156,9 @@ export function AdminShellClient({
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <Icon className={`h-4 w-4 ${isActive ? "text-white" : "text-slate-500"}`} />
+                  <Icon
+                    className={`h-4 w-4 ${isActive ? "text-white" : "text-slate-500"}`}
+                  />
                   <span>{item.label}</span>
                 </div>
                 {item.badge && (
@@ -191,8 +195,12 @@ export function AdminShellClient({
               AD
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-bold text-slate-900 truncate">{adminEmail}</p>
-              <p className="text-[10px] font-semibold text-emerald-600">● Authenticated</p>
+              <p className="text-xs font-bold text-slate-900 truncate">
+                {adminEmail}
+              </p>
+              <p className="text-[10px] font-semibold text-emerald-600">
+                ● Authenticated
+              </p>
             </div>
           </div>
         </div>
@@ -252,7 +260,9 @@ export function AdminShellClient({
                   <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                     <div className="flex items-center gap-2">
                       <Bell className="h-4 w-4 text-indigo-600" />
-                      <h3 className="text-sm font-black text-slate-900">Notifications</h3>
+                      <h3 className="text-sm font-black text-slate-900">
+                        Notifications
+                      </h3>
                     </div>
                     {totalAlerts > 0 ? (
                       <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800">
@@ -276,7 +286,8 @@ export function AdminShellClient({
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-xs font-bold text-slate-900 group-hover:text-amber-900">
-                            {pendingComments} Pending Comment{pendingComments > 1 ? "s" : ""}
+                            {pendingComments} Pending Comment
+                            {pendingComments > 1 ? "s" : ""}
                           </p>
                           <p className="text-[11px] text-slate-500 mt-0.5">
                             Awaiting moderation before public display.
@@ -298,7 +309,8 @@ export function AdminShellClient({
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-xs font-bold text-slate-900 group-hover:text-blue-900">
-                            {unreadMessages} Unread Inquir{unreadMessages > 1 ? "ies" : "y"}
+                            {unreadMessages} Unread Inquir
+                            {unreadMessages > 1 ? "ies" : "y"}
                           </p>
                           <p className="text-[11px] text-slate-500 mt-0.5">
                             New contact form submissions in inbox.
@@ -339,9 +351,7 @@ export function AdminShellClient({
         </header>
 
         {/* Main Content Body */}
-        <main className="flex-1">
-          {children}
-        </main>
+        <main className="flex-1">{children}</main>
       </div>
 
       {/* =========================================================================

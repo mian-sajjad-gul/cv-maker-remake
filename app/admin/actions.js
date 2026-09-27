@@ -13,11 +13,7 @@ import {
   dispatchAdminReplyToMessage,
   deleteContactMessage,
 } from "@/lib/supabase/admin";
-import {
-  clearAdminSession,
-  setAdminSession,
-  DEFAULT_ADMIN_EMAIL,
-} from "@/lib/adminAuth";
+import { clearAdminSession, setAdminSession } from "@/lib/adminAuth";
 import { estimateReadingTime, slugify } from "@/lib/blog";
 
 // ==============================================================================
@@ -309,8 +305,7 @@ export async function updateMessageStatusAction(id, newStatus) {
 export async function dispatchAdminReplyAction(formData) {
   const messageId = formData.get("message_id")?.toString();
   const replyBody = formData.get("reply_body")?.toString()?.trim();
-  const adminEmail =
-    formData.get("admin_email")?.toString() || DEFAULT_ADMIN_EMAIL;
+  const adminEmail = formData.get("admin_email")?.toString();
 
   if (!messageId || !replyBody) {
     throw new Error("Message ID and reply content are required.");
