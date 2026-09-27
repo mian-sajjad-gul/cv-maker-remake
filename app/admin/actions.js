@@ -15,6 +15,12 @@ import {
 } from "@/lib/supabase/admin";
 import { clearAdminSession, setAdminSession } from "@/lib/adminAuth";
 import { estimateReadingTime, slugify } from "@/lib/blog";
+import {
+  getClientIp,
+  checkAdminLoginRateLimit,
+  recordFailedLoginAttempt,
+  resetAdminLoginRateLimit,
+} from "@/lib/redis/rateLimiter";
 
 // ==============================================================================
 // 1. Authentication Actions
@@ -24,13 +30,27 @@ export async function loginAdmin(formData) {
   const email = formData.get("email")?.toString().trim();
   const password = formData.get("password")?.toString();
 
+  // 1. Rate limit inspection by client IP
+  const ip = await getClientIp();
+  const rateStatus = await checkAdminLoginRateLimit(ip);
+
+  if (rateStatus.blocked) {
+    redirect(`/admin/login?error=blocked&retryAfter=${rateStatus.retryAfterMinutes}`);
+  }
+
   const validEmail = process.env.ADMIN_EMAIL;
   const validPassword = process.env.ADMIN_PASSWORD;
 
   if (email !== validEmail || password !== validPassword) {
-    redirect("/admin/login?error=invalid");
+    const failRecord = await recordFailedLoginAttempt(ip);
+    if (failRecord.attempts >= 5) {
+      redirect("/admin/login?error=blocked&retryAfter=15");
+    }
+    redirect(`/admin/login?error=invalid&remaining=${failRecord.remaining}`);
   }
 
+  // 2. Successful login resets counter and creates session
+  await resetAdminLoginRateLimit(ip);
   await setAdminSession(email);
   redirect("/admin");
 }
