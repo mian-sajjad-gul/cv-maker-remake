@@ -13,7 +13,11 @@ import {
   dispatchAdminReplyToMessage,
   deleteContactMessage,
 } from "@/lib/supabase/admin";
-import { clearAdminSession, setAdminSession, DEFAULT_ADMIN_EMAIL } from "@/lib/adminAuth";
+import {
+  clearAdminSession,
+  setAdminSession,
+  DEFAULT_ADMIN_EMAIL,
+} from "@/lib/adminAuth";
 import { estimateReadingTime, slugify } from "@/lib/blog";
 
 // ==============================================================================
@@ -24,8 +28,8 @@ export async function loginAdmin(formData) {
   const email = formData.get("email")?.toString().trim();
   const password = formData.get("password")?.toString();
 
-  const validEmail = process.env.ADMIN_EMAIL || "admin@cvpair.com";
-  const validPassword = process.env.ADMIN_PASSWORD || "admin123";
+  const validEmail = process.env.ADMIN_EMAIL;
+  const validPassword = process.env.ADMIN_PASSWORD;
 
   if (email !== validEmail || password !== validPassword) {
     redirect("/admin/login?error=invalid");
@@ -129,7 +133,8 @@ export async function toggleBlogPostStatus(id, currentStatus) {
     .from("blog_posts")
     .update({
       status: nextStatus,
-      published_at: nextStatus === "published" ? new Date().toISOString() : null,
+      published_at:
+        nextStatus === "published" ? new Date().toISOString() : null,
     })
     .eq("id", id);
 
@@ -178,7 +183,8 @@ export async function adminReplyToCommentAction(formData) {
   const postSlug = formData.get("post_slug")?.toString();
   const postId = formData.get("post_id")?.toString() || null;
   const replyContent = formData.get("content")?.toString()?.trim();
-  const authorName = formData.get("author_name")?.toString() || "CVPair Editorial Team";
+  const authorName =
+    formData.get("author_name")?.toString() || "CVPair Editorial Team";
 
   if (!replyContent || !postSlug) {
     throw new Error("Reply content and post slug are required.");
@@ -214,7 +220,10 @@ export async function submitPublicCommentAction(formData) {
   // Basic anti-spam check (honeypot or length check)
   const honeypot = formData.get("website_hp")?.toString();
   if (honeypot) {
-    return { success: true, message: "Thank you! Your comment has been submitted." };
+    return {
+      success: true,
+      message: "Thank you! Your comment has been submitted.",
+    };
   }
 
   try {
@@ -233,11 +242,15 @@ export async function submitPublicCommentAction(formData) {
     revalidatePath("/admin");
     return {
       success: true,
-      message: "Thank you! Your comment has been submitted and is awaiting editorial moderation.",
+      message:
+        "Thank you! Your comment has been submitted and is awaiting editorial moderation.",
     };
   } catch (err) {
     console.error("Error submitting comment:", err);
-    return { success: false, error: "Unable to submit comment. Please try again later." };
+    return {
+      success: false,
+      error: "Unable to submit comment. Please try again later.",
+    };
   }
 }
 
@@ -249,7 +262,8 @@ export async function submitContactMessageAction(formData) {
   const name = formData.get("name")?.toString()?.trim();
   const email = formData.get("email")?.toString()?.trim();
   const subject = formData.get("subject")?.toString()?.trim();
-  const category = formData.get("category")?.toString()?.trim() || "General Inquiry";
+  const category =
+    formData.get("category")?.toString()?.trim() || "General Inquiry";
   const message = formData.get("message")?.toString()?.trim();
 
   // Honeypot check
@@ -268,11 +282,15 @@ export async function submitContactMessageAction(formData) {
     revalidatePath("/admin");
     return {
       success: true,
-      message: "Thank you! Your message has been received. Our team will get back to you shortly.",
+      message:
+        "Thank you! Your message has been received. Our team will get back to you shortly.",
     };
   } catch (err) {
     console.error("Error submitting contact message:", err);
-    return { success: false, error: "Could not send message. Please try again." };
+    return {
+      success: false,
+      error: "Could not send message. Please try again.",
+    };
   }
 }
 
@@ -291,7 +309,8 @@ export async function updateMessageStatusAction(id, newStatus) {
 export async function dispatchAdminReplyAction(formData) {
   const messageId = formData.get("message_id")?.toString();
   const replyBody = formData.get("reply_body")?.toString()?.trim();
-  const adminEmail = formData.get("admin_email")?.toString() || DEFAULT_ADMIN_EMAIL;
+  const adminEmail =
+    formData.get("admin_email")?.toString() || DEFAULT_ADMIN_EMAIL;
 
   if (!messageId || !replyBody) {
     throw new Error("Message ID and reply content are required.");

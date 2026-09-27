@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/adminAuth";
 import { getPostForAdmin } from "@/lib/blog";
 import { BlogPostForm } from "@/components/admin/BlogPostForm";
-import { AdminNav } from "@/components/admin/AdminNav";
+import { AdminLayout } from "@/components/admin/AdminLayout";
 import { updateBlogPost } from "../../../actions";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 
@@ -19,10 +19,8 @@ export default async function EditBlogPostPage({ params }) {
   if (!post) notFound();
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <AdminNav activeTab="blog" />
-
-      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
+    <AdminLayout activeTab="blog">
+      <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
         <div className="mb-6 flex items-center justify-between">
           <Link
             href="/admin/blog"
@@ -59,7 +57,7 @@ export default async function EditBlogPostPage({ params }) {
             action={updateBlogPost.bind(null, post.id)}
           />
         </div>
-      </main>
-    </div>
+      </div>
+    </AdminLayout>
   );
 }

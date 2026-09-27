@@ -6,7 +6,7 @@ import {
   getContactMessagesForAdmin,
 } from "@/lib/supabase/admin";
 import { getAllPostsForAdmin } from "@/lib/blog";
-import { AdminNav } from "@/components/admin/AdminNav";
+import { AdminLayout } from "@/components/admin/AdminLayout";
 import {
   setCommentModerationStatus,
   toggleBlogPostStatus,
@@ -45,10 +45,8 @@ export default async function AdminDashboardPage() {
   const unreadMessages = recentMessages.filter((m) => !m.is_read || m.status === "unread");
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <AdminNav activeTab="overview" />
-
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+    <AdminLayout activeTab="overview">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
         {/* Welcome Banner & Overview Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-slate-200">
           <div>
@@ -502,7 +500,7 @@ export default async function AdminDashboardPage() {
             </table>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </AdminLayout>
   );
 }

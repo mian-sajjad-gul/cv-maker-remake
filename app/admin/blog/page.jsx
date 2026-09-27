@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/adminAuth";
 import { getAllPostsForAdmin } from "@/lib/blog";
-import { AdminNav } from "@/components/admin/AdminNav";
+import { AdminLayout } from "@/components/admin/AdminLayout";
 import { deleteBlogPost, toggleBlogPostStatus } from "../actions";
 import {
   FileText,
@@ -51,10 +51,8 @@ export default async function AdminBlogPage({ searchParams }) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <AdminNav activeTab="blog" />
-
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+    <AdminLayout activeTab="blog">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-slate-200">
           <div>
@@ -275,7 +273,7 @@ export default async function AdminBlogPage({ searchParams }) {
             </table>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </AdminLayout>
   );
 }
