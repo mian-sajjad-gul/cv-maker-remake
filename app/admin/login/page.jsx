@@ -41,8 +41,8 @@ export default async function AdminLoginPage({ searchParams }) {
                   name="email"
                   type="email"
                   required
-                  defaultValue="admin@cvpair.com"
-                  placeholder="admin@cvpair.com"
+                  defaultValue="you@example.com"
+                  placeholder="you@example.com"
                   className="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-3 py-2.5 text-sm font-medium text-slate-900 focus:bg-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                 />
               </div>
@@ -75,7 +75,7 @@ export default async function AdminLoginPage({ searchParams }) {
           {/* Development Credential Notice */}
           <div className="mt-6 rounded-2xl bg-indigo-50/60 p-4 border border-indigo-100 text-xs text-indigo-900">
             <div className="font-mono text-[11px] space-y-0.5 text-indigo-800">
-              <p>tip: admin@cvpair.com</p>
+              <p>tip: admin@example.com</p>
 
               {isError && (
                 <div className="bg-red text-sm font-semibold text-red-700 flex items-center gap-2">
