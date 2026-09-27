@@ -1,61 +1,82 @@
 import Link from "next/link";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 
 export function Footer() {
   return (
     <footer className="border-t border-slate-200 bg-slate-950 text-white">
-      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 md:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="grid h-9 w-9 place-items-center rounded-2xl bg-white text-sm font-black text-slate-950">CV</span>
-            <span className="text-lg font-black">CVPair</span>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-16">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
+          {/* Brand info */}
+          <div className="lg:col-span-2 space-y-4">
+            <Link href="/" className="flex items-center gap-2">
+              <span className="grid h-9 w-9 place-items-center rounded-2xl bg-white text-sm font-black text-slate-950">
+                CV
+              </span>
+              <span className="text-xl font-black text-white">CVPair</span>
+            </Link>
+            <p className="max-w-sm text-sm leading-relaxed text-slate-400">
+              The 100% free online resume builder. Create, edit, and download job-winning, ATS-friendly resumes in minutes with zero surprise paywalls.
+            </p>
+            <div className="pt-2 flex items-center gap-2 text-xs font-semibold text-emerald-400">
+              <ShieldCheck className="h-4 w-4" />
+              <span>100% Free Forever · No Credit Card Required</span>
+            </div>
           </div>
-          <p className="mt-4 max-w-sm text-sm leading-6 text-slate-400">
-            Create, edit & download job-winning CVs with beautiful templates, live preview, and one-click PDF export.
-          </p>
+
+          {/* Column 1: Builder Tools */}
+          <div>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200">
+              Resume Builder
+            </h3>
+            <div className="mt-4 space-y-2.5 text-sm text-slate-400">
+              <Link href="/resume" className="block hover:text-white transition">Online Resume Builder</Link>
+              <Link href="/#templates" className="block hover:text-white transition">Resume Templates</Link>
+              <Link href="/resume?cover" className="block hover:text-white transition">Cover Letter Studio</Link>
+              <Link href="/#how-it-works" className="block hover:text-white transition">How It Works</Link>
+              <Link href="/#examples" className="block hover:text-white transition">Resume Examples</Link>
+            </div>
+          </div>
+
+          {/* Column 2: Resources & Guides */}
+          <div>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200">
+              Resources & Advice
+            </h3>
+            <div className="mt-4 space-y-2.5 text-sm text-slate-400">
+              <Link href="/blog" className="block hover:text-white transition">Career Advice Blog</Link>
+              <Link href="/blog/write-ats-friendly-resume" className="block hover:text-white transition">ATS Optimization Guide</Link>
+              <Link href="/blog/common-resume-mistakes" className="block hover:text-white transition">Top 10 Resume Mistakes</Link>
+              <Link href="/#faq" className="block hover:text-white transition">Frequently Asked Questions</Link>
+              <Link href="/sitemap-page" className="block hover:text-white transition">Sitemap Directory</Link>
+            </div>
+          </div>
+
+          {/* Column 3: Company & Trust */}
+          <div>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200">
+              Company & Legal
+            </h3>
+            <div className="mt-4 space-y-2.5 text-sm text-slate-400">
+              <Link href="/about" className="block hover:text-white transition">About CVPair</Link>
+              <Link href="/contact" className="block hover:text-white transition">Contact & Support</Link>
+              <Link href="/admin" className="block hover:text-white transition">Admin Portal</Link>
+              <Link href="/privacy" className="block hover:text-white transition">Privacy Policy</Link>
+              <Link href="/terms" className="block hover:text-white transition">Terms & Conditions</Link>
+            </div>
+          </div>
         </div>
 
-        <div>
-          <h3 className="font-bold">Product</h3>
-          <div className="mt-4 space-y-3 text-sm text-slate-400">
-            <Link href="/#templates" className="block hover:text-white">Templates</Link>
-            <Link href="/resume" className="block hover:text-white">CV Builder</Link>
-            <Link href="/#stories" className="block hover:text-white">Success Stories</Link>
-            <Link href="/#pricing" className="block hover:text-white">Pricing</Link>
+        {/* Bottom copyright line */}
+        <div className="mt-14 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <p>© {new Date().getFullYear()} CVPair. All rights reserved.</p>
+          <div className="flex flex-wrap items-center gap-4 text-slate-400">
+            <Link href="/cookie-policy" className="hover:text-white transition">Cookie Policy</Link>
+            <span>·</span>
+            <Link href="/disclaimer" className="hover:text-white transition">Disclaimer</Link>
+            <span>·</span>
+            <Link href="/contact" className="hover:text-white transition">Help Center</Link>
           </div>
         </div>
-
-        <div>
-          <h3 className="font-bold">Resources</h3>
-          <div className="mt-4 space-y-3 text-sm text-slate-400">
-            <Link href="/blog" className="block hover:text-white">Blog</Link>
-            <Link href="/blog/write-ats-friendly-resume" className="block hover:text-white">ATS Guide</Link>
-            <Link href="/blog/common-resume-mistakes" className="block hover:text-white">CV Mistakes</Link>
-            <Link href="/sitemap-page" className="block hover:text-white">Sitemap</Link>
-          </div>
-        </div>
-
-        <div>
-          <h3 className="font-bold">Company</h3>
-          <div className="mt-4 space-y-3 text-sm text-slate-400">
-            <Link href="/about" className="block hover:text-white">About Us</Link>
-            <Link href="/contact" className="block hover:text-white">Contact Us</Link>
-            <Link href="/admin" className="block hover:text-white">Admin Portal</Link>
-          </div>
-        </div>
-
-        <div>
-          <h3 className="font-bold">Legal</h3>
-          <div className="mt-4 space-y-3 text-sm text-slate-400">
-            <Link href="/privacy" className="block hover:text-white">Privacy Policy</Link>
-            <Link href="/terms" className="block hover:text-white">Terms & Conditions</Link>
-            <Link href="/disclaimer" className="block hover:text-white">Disclaimer</Link>
-            <Link href="/cookie-policy" className="block hover:text-white">Cookie Policy</Link>
-          </div>
-        </div>
-      </div>
-
-      <div className="border-t border-white/10 px-4 py-5 text-center text-xs text-slate-500">
-        © {new Date().getFullYear()} CVPair. All rights reserved.
       </div>
     </footer>
   );
