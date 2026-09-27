@@ -15,7 +15,9 @@ export function Footer() {
               <span className="text-xl font-black text-white">CVPair</span>
             </Link>
             <p className="max-w-sm text-sm leading-relaxed text-slate-400">
-              The 100% free online resume builder. Create, edit, and download job-winning, ATS-friendly resumes in minutes with zero surprise paywalls.
+              The 100% free online resume builder. Create, edit, and download
+              job-winning, ATS-friendly resumes in minutes with zero surprise
+              paywalls.
             </p>
             <div className="pt-2 flex items-center gap-2 text-xs font-semibold text-emerald-400">
               <ShieldCheck className="h-4 w-4" />
@@ -29,11 +31,36 @@ export function Footer() {
               Resume Builder
             </h3>
             <div className="mt-4 space-y-2.5 text-sm text-slate-400">
-              <Link href="/resume" className="block hover:text-white transition">Online Resume Builder</Link>
-              <Link href="/#templates" className="block hover:text-white transition">Resume Templates</Link>
-              <Link href="/resume?cover" className="block hover:text-white transition">Cover Letter Studio</Link>
-              <Link href="/#how-it-works" className="block hover:text-white transition">How It Works</Link>
-              <Link href="/#examples" className="block hover:text-white transition">Resume Examples</Link>
+              <Link
+                href="/resume"
+                className="block hover:text-white transition"
+              >
+                Online Resume Builder
+              </Link>
+              <Link
+                href="/#templates"
+                className="block hover:text-white transition"
+              >
+                Resume Templates
+              </Link>
+              <Link
+                href="/resume?cover"
+                className="block hover:text-white transition"
+              >
+                Cover Letter Studio
+              </Link>
+              <Link
+                href="/#how-it-works"
+                className="block hover:text-white transition"
+              >
+                How It Works
+              </Link>
+              <Link
+                href="/#examples"
+                className="block hover:text-white transition"
+              >
+                Resume Examples
+              </Link>
             </div>
           </div>
 
@@ -43,11 +70,30 @@ export function Footer() {
               Resources & Advice
             </h3>
             <div className="mt-4 space-y-2.5 text-sm text-slate-400">
-              <Link href="/blog" className="block hover:text-white transition">Career Advice Blog</Link>
-              <Link href="/blog/write-ats-friendly-resume" className="block hover:text-white transition">ATS Optimization Guide</Link>
-              <Link href="/blog/common-resume-mistakes" className="block hover:text-white transition">Top 10 Resume Mistakes</Link>
-              <Link href="/#faq" className="block hover:text-white transition">Frequently Asked Questions</Link>
-              <Link href="/sitemap-page" className="block hover:text-white transition">Sitemap Directory</Link>
+              <Link href="/blog" className="block hover:text-white transition">
+                Career Advice Blog
+              </Link>
+              <Link
+                href="/blog/write-ats-friendly-resume"
+                className="block hover:text-white transition"
+              >
+                ATS Optimization Guide
+              </Link>
+              <Link
+                href="/blog/common-resume-mistakes"
+                className="block hover:text-white transition"
+              >
+                Top 10 Resume Mistakes
+              </Link>
+              <Link href="/#faq" className="block hover:text-white transition">
+                Frequently Asked Questions
+              </Link>
+              <Link
+                href="/sitemap-page"
+                className="block hover:text-white transition"
+              >
+                Sitemap Directory
+              </Link>
             </div>
           </div>
 
@@ -57,11 +103,24 @@ export function Footer() {
               Company & Legal
             </h3>
             <div className="mt-4 space-y-2.5 text-sm text-slate-400">
-              <Link href="/about" className="block hover:text-white transition">About CVPair</Link>
-              <Link href="/contact" className="block hover:text-white transition">Contact & Support</Link>
-              <Link href="/admin" className="block hover:text-white transition">Admin Portal</Link>
-              <Link href="/privacy" className="block hover:text-white transition">Privacy Policy</Link>
-              <Link href="/terms" className="block hover:text-white transition">Terms & Conditions</Link>
+              <Link href="/about" className="block hover:text-white transition">
+                About CVPair
+              </Link>
+              <Link
+                href="/contact"
+                className="block hover:text-white transition"
+              >
+                Contact & Support
+              </Link>
+              <Link
+                href="/privacy"
+                className="block hover:text-white transition"
+              >
+                Privacy Policy
+              </Link>
+              <Link href="/terms" className="block hover:text-white transition">
+                Terms & Conditions
+              </Link>
             </div>
           </div>
         </div>
@@ -70,11 +129,17 @@ export function Footer() {
         <div className="mt-14 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>© {new Date().getFullYear()} CVPair. All rights reserved.</p>
           <div className="flex flex-wrap items-center gap-4 text-slate-400">
-            <Link href="/cookie-policy" className="hover:text-white transition">Cookie Policy</Link>
+            <Link href="/cookie-policy" className="hover:text-white transition">
+              Cookie Policy
+            </Link>
             <span>·</span>
-            <Link href="/disclaimer" className="hover:text-white transition">Disclaimer</Link>
+            <Link href="/disclaimer" className="hover:text-white transition">
+              Disclaimer
+            </Link>
             <span>·</span>
-            <Link href="/contact" className="hover:text-white transition">Help Center</Link>
+            <Link href="/contact" className="hover:text-white transition">
+              Help Center
+            </Link>
           </div>
         </div>
       </div>

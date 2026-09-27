@@ -1,5 +1,11 @@
 import Link from "next/link";
-import { LayoutTemplate, Edit3, Download, ArrowRight, CheckCircle2 } from "lucide-react";
+import {
+  LayoutTemplate,
+  Edit3,
+  Download,
+  ArrowRight,
+  CheckCircle2,
+} from "lucide-react";
 
 export function HowItWorks() {
   const steps = [
@@ -36,7 +42,10 @@ export function HowItWorks() {
   ];
 
   return (
-    <section id="how-it-works" className="bg-slate-50 py-20 border-b border-slate-200">
+    <section
+      id="how-it-works"
+      className="bg-slate-50 py-20 border-b border-slate-200"
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto">
@@ -47,7 +56,8 @@ export function HowItWorks() {
             Create your job-winning resume in 3 easy steps
           </h2>
           <p className="mt-3 text-base text-slate-600">
-            No design skills needed. Our intuitive builder handles formatting, line spacing, and ATS validation so you can focus on your story.
+            No design skills needed. Our intuitive builder handles formatting,
+            line spacing, and ATS validation so you can focus on your story.
           </p>
         </div>
 
