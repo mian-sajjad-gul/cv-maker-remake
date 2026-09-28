@@ -53,7 +53,7 @@ export default async function SitemapPage() {
       title: "Legal",
       links: [
         { label: "Privacy Policy", href: "/privacy" },
-        { label: "Terms & Conditions", href: "/terms" },
+        { label: "Terms of Service", href: "/terms" },
         { label: "Disclaimer", href: "/disclaimer" },
         { label: "Cookie Policy", href: "/cookie-policy" },
       ],

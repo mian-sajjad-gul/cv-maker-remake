@@ -2,9 +2,9 @@ import { Header } from "@/components/home/Header";
 import { Footer } from "@/components/home/Footer";
 
 export const metadata = {
-  title: "Terms & Conditions | CVPair",
+  title: "Terms of Service | CVPair",
   description:
-    "Read the CVPair Terms & Conditions governing your use of our CV builder service.",
+    "Read the CVPair Terms of Service governing your use of our CV builder service.",
 };
 
 const LAST_UPDATED = "17 June 2026";
@@ -19,8 +19,8 @@ export default function TermsPage() {
           <p className="text-sm font-black uppercase tracking-[0.25em] text-white/50">
             Legal
           </p>
-          <h1 className="mt-4 text-5xl font-black tracking-tight">
-            Terms &amp; Conditions
+          <h1 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">
+            Terms of Service
           </h1>
           <p className="mt-4 text-sm text-white/50">
             Last updated: {LAST_UPDATED}
@@ -34,7 +34,7 @@ export default function TermsPage() {
           <h2>1. Acceptance of Terms</h2>
           <p>
             By accessing or using CVPair at cvpair.com ("the Service"), you
-            agree to be bound by these Terms &amp; Conditions ("Terms"). If you
+            agree to be bound by these Terms of Service ("Terms"). If you
             do not agree with any part of these Terms, you must not use the
             Service.
           </p>
