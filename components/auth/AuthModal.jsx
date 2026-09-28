@@ -2,7 +2,15 @@
 
 import { useState } from "react";
 import { useAuth } from "@/lib/authContext";
-import { Mail, Lock, User, AlertCircle, X, CheckCircle2, ArrowRight } from "lucide-react";
+import {
+  Mail,
+  Lock,
+  User,
+  AlertCircle,
+  X,
+  CheckCircle2,
+  ArrowRight,
+} from "lucide-react";
 
 export function AuthModal() {
   const {
@@ -44,7 +52,9 @@ export function AuthModal() {
       const res = await signInWithPassword(email, password);
       setLoading(false);
       if (!res.success) {
-        setError(res.error || "Unable to sign in. Please verify your credentials.");
+        setError(
+          res.error || "Unable to sign in. Please verify your credentials.",
+        );
       }
     } else {
       const res = await signUpWithPassword(email, password, name);
@@ -75,10 +85,13 @@ export function AuthModal() {
             <span className="text-base font-black tracking-tight">CV</span>
           </div>
           <h2 className="mt-3 text-2xl font-black tracking-tight text-slate-950">
-            {mode === "signin" ? "Sign In to Download CV" : "Create Your CVPair Account"}
+            {mode === "signin"
+              ? "Sign In to Download CV"
+              : "Create Your CVPair Account"}
           </h2>
           <p className="mt-1 text-xs text-slate-500 max-w-xs mx-auto">
-            Access unlimited ATS resume exports, cloud saving, and direct email dispatch.
+            Access unlimited ATS resume exports, cloud saving, and direct email
+            dispatch.
           </p>
         </div>
 
@@ -142,7 +155,12 @@ export function AuthModal() {
         <div className="flex rounded-xl bg-slate-100 p-1 text-xs font-bold mb-4">
           <button
             type="button"
-            onClick={() => { setMode("signin"); setError(""); setNotice(""); }}
+            disabled
+            onClick={() => {
+              setMode("signin");
+              setError("");
+              setNotice("");
+            }}
             className={`flex-1 rounded-lg py-1.5 transition ${
               mode === "signin"
                 ? "bg-white text-slate-900 shadow-xs"
@@ -153,7 +171,12 @@ export function AuthModal() {
           </button>
           <button
             type="button"
-            onClick={() => { setMode("signup"); setError(""); setNotice(""); }}
+            disabled
+            onClick={() => {
+              setMode("signup");
+              setError("");
+              setNotice("");
+            }}
             className={`flex-1 rounded-lg py-1.5 transition ${
               mode === "signup"
                 ? "bg-white text-slate-900 shadow-xs"
@@ -174,6 +197,7 @@ export function AuthModal() {
               <div className="relative">
                 <User className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
                 <input
+                  disabled
                   type="text"
                   required={mode === "signup"}
                   value={name}
@@ -192,6 +216,7 @@ export function AuthModal() {
             <div className="relative">
               <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
               <input
+                disabled
                 type="email"
                 required
                 value={email}
@@ -209,11 +234,14 @@ export function AuthModal() {
             <div className="relative">
               <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
               <input
+                disabled
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder={mode === "signup" ? "At least 6 characters" : "••••••••"}
+                placeholder={
+                  mode === "signup" ? "At least 6 characters" : "••••••••"
+                }
                 className="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-3 py-2 text-xs font-medium text-slate-900 focus:bg-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
               />
             </div>
@@ -221,14 +249,16 @@ export function AuthModal() {
 
           <button
             type="submit"
-            disabled={loading}
+            // disabled={loading}
+            disabled
             className="w-full rounded-xl bg-slate-950 py-2.5 text-xs font-bold text-white hover:bg-slate-800 shadow-sm transition disabled:opacity-50 mt-2"
           >
-            {loading
+            Not working
+            {/* {loading
               ? "Authenticating..."
               : mode === "signin"
-              ? "Sign In & Proceed"
-              : "Create Account & Proceed"}
+                ? "Sign In & Proceed"
+                : "Create Account & Proceed"} */}
           </button>
         </form>
 

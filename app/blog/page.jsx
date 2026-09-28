@@ -60,7 +60,8 @@ export default async function BlogPage() {
               )}
               <div className="p-6">
                 <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
-                  {post.category}{post.reading_time ? ` · ${post.reading_time} min read` : ""}
+                  {post.category}
+                  {post.reading_time ? ` · ${post.reading_time} min read` : ""}
                 </p>
                 <h2 className="mt-3 text-xl font-black tracking-tight text-slate-950">
                   <Link href={`/blog/${post.slug}`}>{post.title}</Link>

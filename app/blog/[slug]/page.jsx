@@ -18,7 +18,7 @@ export async function generateMetadata({ params }) {
   const post = (await getBlogPostBySlug(slug)) ?? getStaticPost(slug);
   if (!post) return { title: "Blog Post" };
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
   return {
     title: post.seo_title || post.title,
     description: post.seo_description || post.excerpt,
