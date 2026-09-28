@@ -13,7 +13,8 @@ import {
   dispatchAdminReplyToMessage,
   deleteContactMessage,
 } from "@/lib/supabase/admin";
-import { clearAdminSession, setAdminSession } from "@/lib/adminAuth";
+import { clearAdminSession, requireAdmin } from "@/lib/adminAuth";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { estimateReadingTime, slugify } from "@/lib/blog";
 import {
   getClientIp,
@@ -30,7 +31,7 @@ export async function loginAdmin(formData) {
   const email = formData.get("email")?.toString().trim();
   const password = formData.get("password")?.toString();
 
-  // 1. Rate limit inspection by client IP
+  // 1. Rate limit check by client IP via Redis
   const ip = await getClientIp();
   const rateStatus = await checkAdminLoginRateLimit(ip);
 
@@ -38,10 +39,19 @@ export async function loginAdmin(formData) {
     redirect(`/admin/login?error=blocked&retryAfter=${rateStatus.retryAfterMinutes}`);
   }
 
-  const validEmail = process.env.ADMIN_EMAIL;
-  const validPassword = process.env.ADMIN_PASSWORD;
+  if (!email || !password) {
+    redirect("/admin/login?error=invalid");
+  }
 
-  if (email !== validEmail || password !== validPassword) {
+  // 2. Supabase Auth authentication via @supabase/ssr session helpers
+  const supabase = await createServerSupabaseClient();
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error || !data?.user) {
+    console.warn("[Admin Auth] Supabase signInWithPassword rejected credentials:", error?.message);
     const failRecord = await recordFailedLoginAttempt(ip);
     if (failRecord.attempts >= 5) {
       redirect("/admin/login?error=blocked&retryAfter=15");
@@ -49,9 +59,22 @@ export async function loginAdmin(formData) {
     redirect(`/admin/login?error=invalid&remaining=${failRecord.remaining}`);
   }
 
-  // 2. Successful login resets counter and creates session
+  // 3. Verify user is authorized as an administrator
+  const adminEmail = process.env.ADMIN_EMAIL || "admin@cvpair.com";
+  const isAuthorizedAdmin =
+    data.user.email?.toLowerCase() === adminEmail.toLowerCase() ||
+    data.user.app_metadata?.role === "admin" ||
+    data.user.user_metadata?.role === "admin";
+
+  if (!isAuthorizedAdmin) {
+    // Non-admin account: terminate session immediately
+    await supabase.auth.signOut();
+    const failRecord = await recordFailedLoginAttempt(ip);
+    redirect("/admin/login?error=unauthorized");
+  }
+
+  // 4. Successful admin login resets the Redis rate limiter
   await resetAdminLoginRateLimit(ip);
-  await setAdminSession(email);
   redirect("/admin");
 }
 
@@ -113,6 +136,7 @@ function postPayload(formData) {
 }
 
 export async function createBlogPost(formData) {
+  await requireAdmin();
   const supabase = createAdminSupabaseClient();
   const payload = postPayload(formData);
 
@@ -126,6 +150,7 @@ export async function createBlogPost(formData) {
 }
 
 export async function updateBlogPost(id, formData) {
+  await requireAdmin();
   const supabase = createAdminSupabaseClient();
   const payload = postPayload(formData);
 
@@ -143,6 +168,7 @@ export async function updateBlogPost(id, formData) {
 }
 
 export async function toggleBlogPostStatus(id, currentStatus) {
+  await requireAdmin();
   const supabase = createAdminSupabaseClient();
   const nextStatus = currentStatus === "published" ? "draft" : "published";
   const { error } = await supabase
@@ -162,6 +188,7 @@ export async function toggleBlogPostStatus(id, currentStatus) {
 }
 
 export async function deleteBlogPost(id) {
+  await requireAdmin();
   const supabase = createAdminSupabaseClient();
   const { error } = await supabase.from("blog_posts").delete().eq("id", id);
   if (error) throw error;
@@ -177,6 +204,7 @@ export async function deleteBlogPost(id) {
 // ==============================================================================
 
 export async function setCommentModerationStatus(id, status, postSlug = "") {
+  await requireAdmin();
   await updateCommentStatus(id, status);
   revalidatePath("/admin/comments");
   revalidatePath("/admin");
@@ -186,6 +214,7 @@ export async function setCommentModerationStatus(id, status, postSlug = "") {
 }
 
 export async function deleteCommentAction(id, postSlug = "") {
+  await requireAdmin();
   await deleteComment(id);
   revalidatePath("/admin/comments");
   revalidatePath("/admin");
@@ -195,6 +224,7 @@ export async function deleteCommentAction(id, postSlug = "") {
 }
 
 export async function adminReplyToCommentAction(formData) {
+  await requireAdmin();
   const parentId = formData.get("parent_id")?.toString();
   const postSlug = formData.get("post_slug")?.toString();
   const postId = formData.get("post_id")?.toString() || null;
@@ -311,18 +341,21 @@ export async function submitContactMessageAction(formData) {
 }
 
 export async function toggleMessageReadAction(id, currentIsRead) {
+  await requireAdmin();
   await setContactMessageRead(id, !currentIsRead);
   revalidatePath("/admin/inbox");
   revalidatePath("/admin");
 }
 
 export async function updateMessageStatusAction(id, newStatus) {
+  await requireAdmin();
   await setContactMessageStatus(id, newStatus);
   revalidatePath("/admin/inbox");
   revalidatePath("/admin");
 }
 
 export async function dispatchAdminReplyAction(formData) {
+  await requireAdmin();
   const messageId = formData.get("message_id")?.toString();
   const replyBody = formData.get("reply_body")?.toString()?.trim();
   const adminEmail = formData.get("admin_email")?.toString();
@@ -338,6 +371,7 @@ export async function dispatchAdminReplyAction(formData) {
 }
 
 export async function deleteContactMessageAction(id) {
+  await requireAdmin();
   await deleteContactMessage(id);
   revalidatePath("/admin/inbox");
   revalidatePath("/admin");

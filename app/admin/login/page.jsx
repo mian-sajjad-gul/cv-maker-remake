@@ -12,6 +12,7 @@ export default async function AdminLoginPage({ searchParams }) {
   const isBlocked = params?.error === "blocked";
   const retryAfter = params?.retryAfter || "15";
   const isInvalid = params?.error === "invalid";
+  const isUnauthorized = params?.error === "unauthorized";
   const remaining = params?.remaining;
 
   return (
@@ -46,6 +47,21 @@ export default async function AdminLoginPage({ searchParams }) {
                     <Clock className="h-3.5 w-3.5" />
                     <span>Try again in approximately {retryAfter} minute(s)</span>
                   </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Unauthorized Role Banner */}
+          {isUnauthorized && (
+            <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50/90 p-4 text-xs text-amber-900 shadow-xs">
+              <div className="flex items-start gap-3">
+                <ShieldAlert className="h-5 w-5 shrink-0 text-amber-600 mt-0.5" />
+                <div>
+                  <h4 className="font-bold text-amber-950 text-sm">Unauthorized Account</h4>
+                  <p className="mt-1 text-amber-800 leading-relaxed">
+                    This account is authenticated but does not possess administrative access privileges. Please sign in with authorized administrator credentials.
+                  </p>
                 </div>
               </div>
             </div>
