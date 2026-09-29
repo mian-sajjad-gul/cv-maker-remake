@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import { supabaseClient } from "./supabase/client";
 
 const AuthContext = createContext({
@@ -17,7 +23,6 @@ const AuthContext = createContext({
 });
 
 const STORAGE_KEY = "cvpair_user_session";
-const REGISTERED_USERS_KEY = "cvpair_registered_users";
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -31,12 +36,16 @@ export function AuthProvider({ children }) {
       // 1. Try Supabase session if configured
       if (supabaseClient) {
         try {
-          const { data: { session } } = await supabaseClient.auth.getSession();
+          const {
+            data: { session },
+          } = await supabaseClient.auth.getSession();
           if (session?.user) {
             setUser({
               id: session.user.id,
               email: session.user.email,
-              name: session.user.user_metadata?.full_name || session.user.email?.split("@")[0],
+              name:
+                session.user.user_metadata?.full_name ||
+                session.user.email?.split("@")[0],
               avatar: session.user.user_metadata?.avatar_url || null,
               provider: session.user.app_metadata?.provider || "supabase",
             });
@@ -44,7 +53,10 @@ export function AuthProvider({ children }) {
             return;
           }
         } catch (err) {
-          console.warn("[Auth] Supabase session check error, checking local store:", err);
+          console.warn(
+            "[Auth] Supabase session check error, checking local store:",
+            err,
+          );
         }
       }
 
@@ -64,12 +76,16 @@ export function AuthProvider({ children }) {
 
     // Listen to Supabase auth state change if client exists
     if (supabaseClient) {
-      const { data: { subscription } } = supabaseClient.auth.onAuthStateChange((_event, session) => {
+      const {
+        data: { subscription },
+      } = supabaseClient.auth.onAuthStateChange((_event, session) => {
         if (session?.user) {
           const u = {
             id: session.user.id,
             email: session.user.email,
-            name: session.user.user_metadata?.full_name || session.user.email?.split("@")[0],
+            name:
+              session.user.user_metadata?.full_name ||
+              session.user.email?.split("@")[0],
             avatar: session.user.user_metadata?.avatar_url || null,
             provider: session.user.app_metadata?.provider || "supabase",
           };
@@ -98,17 +114,20 @@ export function AuthProvider({ children }) {
     setModalSuccessCallback(null);
   }, []);
 
-  const triggerPostAuth = useCallback((authedUser) => {
-    setUser(authedUser);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(authedUser));
-    } catch {}
-    setAuthModalOpen(false);
-    if (modalSuccessCallback) {
-      modalSuccessCallback(authedUser);
-      setModalSuccessCallback(null);
-    }
-  }, [modalSuccessCallback]);
+  const triggerPostAuth = useCallback(
+    (authedUser) => {
+      setUser(authedUser);
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(authedUser));
+      } catch {}
+      setAuthModalOpen(false);
+      if (modalSuccessCallback) {
+        modalSuccessCallback(authedUser);
+        setModalSuccessCallback(null);
+      }
+    },
+    [modalSuccessCallback],
+  );
 
   // Google / Gmail Sign In
   const signInWithGoogle = async () => {
@@ -117,22 +136,32 @@ export function AuthProvider({ children }) {
         const { error } = await supabaseClient.auth.signInWithOAuth({
           provider: "google",
           options: {
-            redirectTo: typeof window !== "undefined" ? window.location.href : undefined,
+            redirectTo:
+              typeof window !== "undefined" ? window.location.href : undefined,
           },
         });
         if (!error) return { success: true };
         console.warn("[Auth] Supabase Google OAuth error:", error.message);
       } catch (err) {
-        console.warn("[Auth] Supabase Google OAuth failed, continuing with fallback Google login:", err);
+        console.warn(
+          "[Auth] Supabase Google OAuth failed, continuing with fallback Google login:",
+          err,
+        );
       }
     }
 
     // Interactive Google account picker simulation
-    const promptEmail = window.prompt("Enter your Gmail address to sign in with Google:", "user@gmail.com");
+    const promptEmail = window.prompt(
+      "Enter your Gmail address to sign in with Google:",
+      "user@gmail.com",
+    );
     if (!promptEmail) return { success: false, error: "Sign-in cancelled" };
 
     const email = promptEmail.trim();
-    const name = email.split("@")[0].replace(/[._-]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+    const name = email
+      .split("@")[0]
+      .replace(/[._-]/g, " ")
+      .replace(/\b\w/g, (c) => c.toUpperCase());
     const googleUser = {
       id: `google-${Date.now()}`,
       email,
@@ -146,168 +175,124 @@ export function AuthProvider({ children }) {
   };
 
   // Email & Password Sign In
-  const signInWithPassword = async (email, password) => {
+  const signInWithPassword = async (email, password, captchaToken) => {
     if (!email || !password) {
       return { success: false, error: "Please enter both email and password." };
     }
-
-    const cleanEmail = email.trim();
-
-    if (supabaseClient) {
-      try {
-        const { data, error } = await supabaseClient.auth.signInWithPassword({
-          email: cleanEmail,
-          password,
-        });
-        if (error) throw error;
-        if (data?.user) {
-          const u = {
-            id: data.user.id,
-            email: data.user.email,
-            name: data.user.user_metadata?.full_name || cleanEmail.split("@")[0],
-            avatar: data.user.user_metadata?.avatar_url || null,
-            provider: "supabase",
-          };
-          triggerPostAuth(u);
-          return { success: true, user: u };
-        }
-      } catch (err) {
-        console.warn("[Auth] Supabase sign in error:", err?.message || err);
-
-        // Check if there is an offline/local demo account registered before rejecting
-        let registered = [];
-        try {
-          registered = JSON.parse(localStorage.getItem(REGISTERED_USERS_KEY) || "[]");
-        } catch {}
-        const localFound = registered.find((u) => u.email?.toLowerCase() === cleanEmail.toLowerCase());
-        if (localFound) {
-          if (localFound.password !== password) {
-            return { success: false, error: "Incorrect password. Please try again." };
-          }
-          const authedUser = {
-            id: localFound.id,
-            email: localFound.email,
-            name: localFound.name,
-            avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(localFound.name)}&backgroundColor=0f172a`,
-            provider: "local",
-          };
-          triggerPostAuth(authedUser);
-          return { success: true, user: authedUser };
-        }
-
-        // Return real Supabase authentication error
-        return { success: false, error: err?.message || "Invalid email or password." };
-      }
+    if (!supabaseClient) {
+      console.warn(
+        "[Auth] Supabase client is not initialized. Check env vars.",
+      );
+      return {
+        success: false,
+        error: "Sign in is temporarily unavailable. Please try again later.",
+      };
     }
-
-    // Local authentication check if Supabase is offline
-    let registered = [];
     try {
-      registered = JSON.parse(localStorage.getItem(REGISTERED_USERS_KEY) || "[]");
-    } catch {}
+      const cleanEmail = email.trim();
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: cleanEmail,
+        password,
+        options: { captchaToken },
+      });
+      if (error || !data?.user) {
+        return {
+          success: false,
+          error: error?.message || "Invalid email or password.",
+        };
+      }
 
-    const found = registered.find((u) => u.email?.toLowerCase() === cleanEmail.toLowerCase());
-    if (found && found.password !== password) {
-      return { success: false, error: "Incorrect password. Please try again." };
+      const u = {
+        id: data.user.id,
+        email: data.user.email,
+        name: data.user.user_metadata?.full_name || cleanEmail.split("@")[0],
+        avatar: data.user.user_metadata?.avatar_url || null,
+        provider: "supabase",
+      };
+      triggerPostAuth(u);
+      return { success: true, user: u };
+    } catch (error) {
+      console.warn("[Auth] Unexpected sign in error:", err?.message || err);
+      return {
+        success: false,
+        error: "Can't reach the server. Check your connection and try again.",
+      };
     }
-
-    const authedUser = {
-      id: found?.id || `user-${Date.now()}`,
-      email: cleanEmail,
-      name: found?.name || cleanEmail.split("@")[0],
-      avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(cleanEmail)}&backgroundColor=0f172a`,
-      provider: "local",
-    };
-
-    triggerPostAuth(authedUser);
-    return { success: true, user: authedUser };
   };
-
   // Sign Up with Email, Password & Name
-  const signUpWithPassword = async (email, password, name = "") => {
+  const signUpWithPassword = async (
+    email,
+    password,
+    name = "",
+    captchaToken,
+  ) => {
     if (!email || !password) {
       return { success: false, error: "Please provide an email and password." };
     }
     if (password.length < 6) {
-      return { success: false, error: "Password must be at least 6 characters." };
+      return {
+        success: false,
+        error: "Password must be at least 6 characters.",
+      };
+    }
+    if (!supabaseClient) {
+      console.warn(
+        "[Auth] Supabase client is not initialized. Check env vars.",
+      );
+      return {
+        success: false,
+        error: "Sign up temporarily unavailable. Please try again later.",
+      };
     }
 
-    const cleanEmail = email.trim();
-    const cleanName = name.trim() || cleanEmail.split("@")[0];
+    try {
+      const cleanEmail = email.trim();
+      const cleanName = name.trim() || cleanEmail.split("@")[0];
 
-    if (supabaseClient) {
-      try {
-        const { data, error } = await supabaseClient.auth.signUp({
-          email: cleanEmail,
-          password,
-          options: {
-            data: { full_name: cleanName },
-          },
-        });
-        if (error) throw error;
-        if (data?.user) {
-          const requiresConfirmation = !data.session;
-          const u = {
-            id: data.user.id,
-            email: data.user.email,
-            name: cleanName,
-            avatar: null,
-            provider: "supabase",
-          };
+      const { data, error } = await supabaseClient.auth.signUp({
+        email: cleanEmail,
+        password,
+        options: {
+          captchaToken,
+          data: { full_name: cleanName },
+        },
+      });
+      if (error) throw error;
 
-          if (!requiresConfirmation) {
-            triggerPostAuth(u);
-          }
+      if (data?.user) {
+        const requiresConfirmation = !data.session;
+        const u = {
+          id: data.user.id,
+          email: data.user.email,
+          name: cleanName,
+          avatar: null,
+          provider: "supabase",
+        };
 
-          return {
-            success: true,
-            user: u,
-            requiresConfirmation,
-            message: requiresConfirmation
-              ? "Account created! A confirmation email has been dispatched. Please verify your email before signing in."
-              : "Account created successfully!",
-          };
+        if (!requiresConfirmation) {
+          triggerPostAuth(u);
         }
-      } catch (err) {
-        console.warn("[Auth] Supabase signup error:", err?.message || err);
-        return { success: false, error: err?.message || "Failed to create account with Supabase." };
+
+        return {
+          success: true,
+          user: u,
+          requiresConfirmation,
+          message: requiresConfirmation
+            ? "Account created! A confirmation email has been dispatched. Please verify your email before signing in."
+            : "Account created successfully!",
+        };
       }
+      return {
+        success: false,
+        error: "Account could not be created. Please try again.",
+      };
+    } catch (err) {
+      console.warn("[Auth] Supabase signup error:", err?.message || err);
+      return {
+        success: false,
+        error: err?.message || "Failed to create account.",
+      };
     }
-
-    // Local user store fallback if Supabase not configured
-    let registered = [];
-    try {
-      registered = JSON.parse(localStorage.getItem(REGISTERED_USERS_KEY) || "[]");
-    } catch {}
-
-    const existing = registered.find((u) => u.email?.toLowerCase() === cleanEmail.toLowerCase());
-    if (existing) {
-      return { success: false, error: "An account with this email already exists. Please sign in." };
-    }
-
-    const newUserRecord = {
-      id: `user-${Date.now()}`,
-      email: cleanEmail,
-      password,
-      name: cleanName,
-      created_at: new Date().toISOString(),
-    };
-
-    registered.push(newUserRecord);
-    try {
-      localStorage.setItem(REGISTERED_USERS_KEY, JSON.stringify(registered));
-    } catch {}
-
-    const authedUser = {
-      id: newUserRecord.id,
-      email: newUserRecord.email,
-      name: newUserRecord.name,
-      avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(newUserRecord.name)}&backgroundColor=0f172a`,
-      provider: "local",
-    };
-
-    triggerPostAuth(authedUser);
-    return { success: true, user: authedUser };
   };
 
   // Sign out
@@ -315,6 +300,33 @@ export function AuthProvider({ children }) {
     if (supabaseClient) {
       try {
         await supabaseClient.auth.signOut();
+      } catch (e) {
+        console.error("Sign out error", e);
+      }
+    }
+    setUser(null);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {}
+  };
+  const signUpResendEmail = async (email) => {
+    const cleanEmail = email.trim();
+    if (supabaseClient) {
+      const { data, error } = await supabase.auth.signUp({
+        phone: "123456789",
+        password: "example-password",
+        options: {
+          channel: "whatsapp",
+        },
+      });
+      try {
+        const { error } = await supabaseClient.auth.resend({
+          type: "signup",
+          email: cleanEmail,
+          options: {
+            emailRedirectTo: "https://example.com/welcome",
+          },
+        });
       } catch (e) {
         console.error("Sign out error", e);
       }
