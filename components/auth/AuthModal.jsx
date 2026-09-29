@@ -263,7 +263,9 @@ export function AuthModal() {
             type="submit"
             disabled={loading || !captchaToken}
             // disabled
-            className="w-full rounded-xl bg-slate-950 py-2.5 text-xs font-bold text-white hover:bg-slate-800 shadow-sm transition disabled:opacity-50 mt-2"
+            className="w-full rounded-xl bg-slate-950 py-2.5 text-xs font-bold text-white shadow-sm transition mt-2
+  enabled:hover:bg-slate-900 enabled:cursor-pointer
+  disabled:opacity-30 disabled:cursor-not-allowed"
           >
             {/* Not working */}
             {loading
