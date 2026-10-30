@@ -80,10 +80,7 @@ export default async function JobDetailPage({ params }: Props) {
         }}
       />
 
-      <Link
-        href="/remote-jobs"
-        className="text-sm text-neutral-600 hover:text-black"
-      >
+      <Link href="/jobs" className="text-sm text-neutral-600 hover:text-black">
         ← All remote jobs
       </Link>
 
