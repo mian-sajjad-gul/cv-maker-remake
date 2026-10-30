@@ -1,6 +1,6 @@
 "use client";
-
-import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, us } from "react";
 import { dummyAds } from "@/lib/dummyAds";
 
 export function AdBlock({
@@ -13,6 +13,7 @@ export function AdBlock({
   const useDummyAds = process.env.NEXT_PUBLIC_USE_DUMMY_ADS === "true";
   const clientId = process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID;
   const ad = dummyAds[type] || dummyAds.rectangle;
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!useDummyAds || !clientId) return;
