@@ -59,26 +59,48 @@ function Field({
     </label>
   );
 }
+const ALLOWED = [
+  "heading",
+  "paragraph",
+  "list",
+  "image",
+  "callout",
+  "faq",
+  "cta",
+];
+function toArray(value) {
+  if (Array.isArray(value)) return value;
+  if (typeof value === "string") {
+    try {
+      return toArray(JSON.parse(value));
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
 
 function BlockEditor({ blocks, setBlocks }) {
   const [jsonInput, setJsonInput] = useState("");
   const [jsonError, setJsonError] = useState("");
-  const importJsonBlocks = () => {
-    try {
-      const parsed = JSON.parse(jsonInput);
 
-      if (!Array.isArray(parsed)) {
-        setJsonError("JSON must be an array of blocks.");
-        return;
-      }
+  const importJsonBlocks = (mode = "replace") => {
+    const parsed = toArray(jsonInput.trim());
+    const valid = parsed.filter(
+      (b) => b && typeof b === "object" && ALLOWED.includes(b.type),
+    );
 
-      setBlocks(parsed);
-      setJsonInput("");
-      setJsonError("");
-    } catch {
-      setJsonError("Invalid JSON. Please check your formatting.");
+    if (!parsed.length || valid.length !== parsed.length) {
+      setJsonError(
+        "Invalid JSON: expected an array of blocks with known types.",
+      );
+      return;
     }
+    setBlocks(mode === "append" ? [...blocks, ...valid] : valid);
+    setJsonInput("");
+    setJsonError("");
   };
+
   const update = (index, patch) =>
     setBlocks(
       blocks.map((block, i) => (i === index ? { ...block, ...patch } : block)),
@@ -114,14 +136,29 @@ function BlockEditor({ blocks, setBlocks }) {
               Paste an array of content blocks and import them into the editor.
             </p>
           </div>
-
-          <button
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => importJsonBlocks("append")}
+              className="rounded-full border border-slate-300 px-4 py-2 text-xs font-bold hover:bg-slate-50"
+            >
+              Append
+            </button>
+            <button
+              type="button"
+              onClick={() => importJsonBlocks("replace")}
+              className="rounded-full bg-slate-900 px-4 py-2 text-xs font-bold text-white hover:bg-slate-700"
+            >
+              Replace all
+            </button>
+          </div>
+          {/* <button
             type="button"
             onClick={importJsonBlocks}
             className="rounded-full bg-slate-900 px-4 py-2 text-xs font-bold text-white hover:bg-slate-700"
           >
             Import JSON
-          </button>
+          </button> */}
         </div>
 
         <textarea
@@ -173,7 +210,7 @@ function BlockEditor({ blocks, setBlocks }) {
 
           {block.type === "heading" && (
             <div className="grid gap-3 md:grid-cols-[100px_1fr]">
-              <input
+              {/* <input
                 type="number"
                 min="2"
                 max="3"
@@ -182,7 +219,17 @@ function BlockEditor({ blocks, setBlocks }) {
                   update(index, { level: Number(e.target.value) })
                 }
                 className="rounded-xl border border-slate-200 px-3 py-2 text-sm"
-              />
+              /> */}
+              <select
+                value={block.level || 2}
+                onChange={(e) =>
+                  update(index, { level: Number(e.target.value) })
+                }
+                className="rounded-xl border border-slate-200 px-3 py-2 text-sm"
+              >
+                <option value={2}>H2</option>
+                <option value={3}>H3</option>
+              </select>
               <input
                 value={block.text || ""}
                 onChange={(e) => update(index, { text: e.target.value })}
@@ -280,10 +327,12 @@ function BlockEditor({ blocks, setBlocks }) {
 }
 
 export function BlogPostForm({ post, action }) {
-  const initialBlocks = useMemo(
-    () => (post?.content_blocks?.length ? post.content_blocks : emptyBlocks),
-    [post],
-  );
+  const initialBlocks = useMemo(() => {
+    const existing = toArray(post?.content_blocks).filter(
+      (b) => b && typeof b === "object" && ALLOWED.includes(b.type),
+    );
+    return existing.length ? existing : emptyBlocks;
+  }, [post]);
   const [blocks, setBlocks] = useState(initialBlocks);
   const [title, setTitle] = useState(post?.title || "");
   const [slug, setSlug] = useState(post?.slug || "");
@@ -296,6 +345,29 @@ export function BlogPostForm({ post, action }) {
       .replace(/\s+/g, "-")
       .replace(/-+/g, "-");
   }
+  function blockText(b) {
+    switch (b.type) {
+      case "heading":
+      case "paragraph":
+      case "callout":
+        return b.text || "";
+      case "list":
+        return (b.items || []).join(" ");
+      case "faq":
+        return `${b.question || ""} ${b.answer || ""}`;
+      case "cta":
+        return `${b.text || ""} ${b.buttonText || ""}`;
+      default:
+        return "";
+    }
+  }
+
+  const wordCount = useMemo(
+    () => blocks.map(blockText).join(" ").split(/\s+/).filter(Boolean).length,
+    [blocks],
+  );
+
+  // above the Save button
 
   return (
     <form action={action} className="space-y-6">
@@ -349,7 +421,7 @@ export function BlogPostForm({ post, action }) {
           <Field
             label="Tags, comma separated"
             name="tags"
-            defaultValue={(post?.tags || []).join(", ")}
+            defaultValue={toArray(post?.tags).join(", ")}
           />
           <Field
             label="Author Name"
@@ -423,6 +495,11 @@ export function BlogPostForm({ post, action }) {
           <option value="draft">Draft</option>
           <option value="published">Published</option>
         </select>
+        <p className="text-xs font-bold text-slate-500">
+          {wordCount} words · ~{Math.max(1, Math.ceil(wordCount / 200))} min
+          read
+          {wordCount < 1200 && " · too short to rank"}
+        </p>
         <button className="mt-4 rounded-full bg-slate-900 px-5 py-2 text-sm font-bold text-white hover:bg-slate-700">
           Save Post
         </button>

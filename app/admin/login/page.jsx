@@ -1,7 +1,15 @@
 import Link from "next/link";
 import { loginAdmin } from "../actions";
-import { Shield, Lock, Mail, ArrowLeft, KeyRound, ShieldAlert, Clock } from "lucide-react";
-
+import {
+  Shield,
+  Lock,
+  Mail,
+  ArrowLeft,
+  KeyRound,
+  ShieldAlert,
+  Clock,
+} from "lucide-react";
+import CaptchaSubmit from "./TurnstileStatus";
 export const metadata = {
   title: "Admin Portal Login | CVPair",
   description: "Secure administrative login for CVPair CV Maker.",
@@ -14,7 +22,6 @@ export default async function AdminLoginPage({ searchParams }) {
   const isInvalid = params?.error === "invalid";
   const isUnauthorized = params?.error === "unauthorized";
   const remaining = params?.remaining;
-
   return (
     <main className="min-h-screen bg-slate-100 flex flex-col justify-center px-4 py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -27,7 +34,8 @@ export default async function AdminLoginPage({ searchParams }) {
           CVPair Admin Portal
         </h1>
         <p className="mt-2 text-center text-sm text-slate-600">
-          Administrative control center for blog, comments moderation, and inquiries inbox.
+          Administrative control center for blog, comments moderation, and
+          inquiries inbox.
         </p>
       </div>
 
@@ -39,13 +47,19 @@ export default async function AdminLoginPage({ searchParams }) {
               <div className="flex items-start gap-3">
                 <ShieldAlert className="h-5 w-5 shrink-0 text-rose-600 mt-0.5" />
                 <div>
-                  <h4 className="font-bold text-rose-950 text-sm">Security Lockout Active</h4>
+                  <h4 className="font-bold text-rose-950 text-sm">
+                    Security Lockout Active
+                  </h4>
                   <p className="mt-1 text-rose-800 leading-relaxed">
-                    Too many failed login attempts were detected from your IP address. For your security, admin login is temporarily locked.
+                    Too many failed login attempts were detected from your IP
+                    address. For your security, admin login is temporarily
+                    locked.
                   </p>
                   <div className="mt-2.5 inline-flex items-center gap-1.5 rounded-lg bg-rose-100 px-2.5 py-1 text-[11px] font-bold text-rose-900">
                     <Clock className="h-3.5 w-3.5" />
-                    <span>Try again in approximately {retryAfter} minute(s)</span>
+                    <span>
+                      Try again in approximately {retryAfter} minute(s)
+                    </span>
                   </div>
                 </div>
               </div>
@@ -58,9 +72,13 @@ export default async function AdminLoginPage({ searchParams }) {
               <div className="flex items-start gap-3">
                 <ShieldAlert className="h-5 w-5 shrink-0 text-amber-600 mt-0.5" />
                 <div>
-                  <h4 className="font-bold text-amber-950 text-sm">Unauthorized Account</h4>
+                  <h4 className="font-bold text-amber-950 text-sm">
+                    Unauthorized Account
+                  </h4>
                   <p className="mt-1 text-amber-800 leading-relaxed">
-                    This account is authenticated but does not possess administrative access privileges. Please sign in with authorized administrator credentials.
+                    This account is authenticated but does not possess
+                    administrative access privileges. Please sign in with
+                    authorized administrator credentials.
                   </p>
                 </div>
               </div>
@@ -73,13 +91,20 @@ export default async function AdminLoginPage({ searchParams }) {
               <div className="flex items-start gap-3">
                 <KeyRound className="h-5 w-5 shrink-0 text-amber-600 mt-0.5" />
                 <div>
-                  <h4 className="font-bold text-amber-950 text-sm">Authentication Failed</h4>
+                  <h4 className="font-bold text-amber-950 text-sm">
+                    Authentication Failed
+                  </h4>
                   <p className="mt-1 text-amber-800 leading-relaxed">
-                    Invalid email address or password. Please verify your credentials.
+                    Invalid email address or password. Please verify your
+                    credentials.
                   </p>
                   {remaining !== undefined && (
                     <p className="mt-2 text-[11px] font-semibold text-amber-900">
-                      Rate limiting: <span className="font-bold text-rose-700">{remaining} attempt(s) remaining</span> before 15-minute temporary lockout.
+                      Rate limiting:{" "}
+                      <span className="font-bold text-rose-700">
+                        {remaining} attempt(s) remaining
+                      </span>{" "}
+                      before 15-minute temporary lockout.
                     </p>
                   )}
                 </div>
@@ -123,14 +148,16 @@ export default async function AdminLoginPage({ searchParams }) {
                 />
               </div>
             </div>
-
-            <button
+            <CaptchaSubmit isBlocked={isBlocked} />
+            {/* <button
               type="submit"
-              disabled={isBlocked}
+              disabled={isBlocked || !captchaToken}
               className="w-full rounded-xl bg-slate-900 py-3 text-sm font-bold text-white hover:bg-slate-800 shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isBlocked ? "Access Suspended (Rate Limited)" : "Sign In to Admin"}
-            </button>
+              {isBlocked
+                ? "Access Suspended (Rate Limited)"
+                : "Sign In to Admin"}
+            </button> */}
           </form>
 
           <div className="mt-6 text-center border-t border-slate-100 pt-4">

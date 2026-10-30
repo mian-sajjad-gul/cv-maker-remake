@@ -30,28 +30,33 @@ import {
 export async function loginAdmin(formData) {
   const email = formData.get("email")?.toString().trim();
   const password = formData.get("password")?.toString();
-
+  const captchaToken = formData.get("captcha_token")?.toString();
   // 1. Rate limit check by client IP via Redis
   const ip = await getClientIp();
   const rateStatus = await checkAdminLoginRateLimit(ip);
 
   if (rateStatus.blocked) {
-    redirect(`/admin/login?error=blocked&retryAfter=${rateStatus.retryAfterMinutes}`);
+    redirect(
+      `/admin/login?error=blocked&retryAfter=${rateStatus.retryAfterMinutes}`,
+    );
   }
 
-  if (!email || !password) {
+  if (!email || !password || !captchaToken) {
     redirect("/admin/login?error=invalid");
   }
 
-  // 2. Supabase Auth authentication via @supabase/ssr session helpers
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
+    options: { captchaToken },
   });
 
   if (error || !data?.user) {
-    console.warn("[Admin Auth] Supabase signInWithPassword rejected credentials:", error?.message);
+    console.warn(
+      "[Admin Auth] Supabase signInWithPassword rejected credentials:",
+      error?.message,
+    );
     const failRecord = await recordFailedLoginAttempt(ip);
     if (failRecord.attempts >= 5) {
       redirect("/admin/login?error=blocked&retryAfter=15");
@@ -87,51 +92,161 @@ export async function logoutAdmin() {
 // 2. Blog Posts CRUD
 // ==============================================================================
 
+const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL || "https://cvpair.com"
+).replace(/\/$/, "");
+
+const ALLOWED_BLOCK_TYPES = [
+  "heading",
+  "paragraph",
+  "list",
+  "image",
+  "callout",
+  "faq",
+  "cta",
+];
+
+const PLACEHOLDERS = [
+  "Main SEO section heading",
+  "Write a short, helpful paragraph",
+  "Common reader question?",
+  "Clear answer that can appear in FAQ schema",
+  "Add a practical tip",
+  "Add a second practical tip",
+  "New heading",
+  "New paragraph",
+  "Helpful callout text",
+];
+
+// Collapse whitespace (removes stray \r\n) and trim
+const clean = (v = "") => v.toString().replace(/\s+/g, " ").trim();
+
+const isSafeHref = (v) => v.startsWith("/") || v.startsWith("https://");
+const isBadHost = (v) => /localhost|127\.0\.0\.1/i.test(v);
+
 function parseTags(value = "") {
-  return value
-    .split(",")
-    .map((tag) => tag.trim())
-    .filter(Boolean);
+  return [
+    ...new Set(
+      value
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean),
+    ),
+  ];
 }
 
 function parseBlocks(value = "[]") {
+  let parsed;
   try {
-    const parsed = JSON.parse(value || "[]");
-    return Array.isArray(parsed) ? parsed : [];
+    parsed = JSON.parse(value || "[]");
   } catch {
     return [];
   }
+  if (!Array.isArray(parsed)) return [];
+
+  return (
+    parsed
+      .filter(
+        (b) =>
+          b && typeof b === "object" && ALLOWED_BLOCK_TYPES.includes(b.type),
+      )
+      .map((b) => {
+        const out = { ...b };
+        if (typeof out.text === "string") out.text = out.text.trim();
+        if (typeof out.question === "string")
+          out.question = out.question.trim();
+        if (typeof out.answer === "string") out.answer = out.answer.trim();
+        if (out.type === "list") {
+          out.items = (out.items || [])
+            .map((i) => String(i).trim())
+            .filter(Boolean);
+        }
+        if (out.type === "heading") {
+          out.level = out.level === 3 ? 3 : 2; // only H2 / H3
+        }
+        return out;
+      })
+      // drop empty blocks
+      .filter((b) => {
+        if (b.type === "list") return b.items.length > 0;
+        if (b.type === "faq") return b.question && b.answer;
+        if (b.type === "image") return b.url;
+        return b.text;
+      })
+  );
+}
+
+function blockHasPlaceholder(b) {
+  const text = [b.text, b.question, b.answer, ...(b.items || [])]
+    .filter(Boolean)
+    .join(" ");
+  return PLACEHOLDERS.some((p) => text.includes(p));
 }
 
 function postPayload(formData) {
-  const title = formData.get("title")?.toString().trim() || "";
+  const title = clean(formData.get("title"));
   const slug = slugify(formData.get("slug")?.toString() || title);
   const contentBlocks = parseBlocks(formData.get("content_blocks")?.toString());
   const status =
     formData.get("status")?.toString() === "published" ? "published" : "draft";
 
+  const coverImage = clean(formData.get("cover_image"));
+  const coverAlt = clean(formData.get("cover_alt"));
+  const authorAvatar = clean(formData.get("author_avatar"));
+  const excerpt = clean(formData.get("excerpt"));
+  const canonicalInput = clean(formData.get("canonical_url"));
+  const canonicalUrl = canonicalInput || `${SITE_URL}/blog/${slug}`;
+
+  // ---- Validation ----
+  const errors = [];
+  if (!title) errors.push("Title is required.");
+  if (!slug) errors.push("Slug is required.");
+  if (coverImage && !coverAlt)
+    errors.push("Cover alt text is required when a cover image is set.");
+  if (!canonicalUrl.startsWith("https://") || isBadHost(canonicalUrl)) {
+    errors.push(
+      "Canonical URL must start with https:// and cannot be localhost.",
+    );
+  }
+  if (authorAvatar && (!isSafeHref(authorAvatar) || isBadHost(authorAvatar))) {
+    errors.push("Author avatar must be a real image URL (https:// or /path).");
+  }
+  if (coverImage && !isSafeHref(coverImage)) {
+    errors.push("Cover image must start with https:// or /.");
+  }
+  for (const b of contentBlocks) {
+    if (b.type === "cta" && !isSafeHref(b.href || "")) {
+      errors.push(`CTA link "${b.href}" must start with / or https://.`);
+    }
+  }
+  if (status === "published") {
+    if (contentBlocks.some(blockHasPlaceholder)) {
+      errors.push("Remove placeholder text before publishing.");
+    }
+    if (!contentBlocks.length) errors.push("Add content before publishing.");
+  }
+  if (errors.length) throw new Error(errors.join(" "));
+
+  const seoDescription = clean(formData.get("seo_description")) || excerpt;
+
   return {
     title,
     slug,
-    excerpt: formData.get("excerpt")?.toString() || "",
+    excerpt,
     content_blocks: contentBlocks,
-    cover_image: formData.get("cover_image")?.toString() || "",
-    cover_alt: formData.get("cover_alt")?.toString() || "",
-    category: formData.get("category")?.toString() || "",
+    cover_image: coverImage,
+    cover_alt: coverAlt,
+    category: clean(formData.get("category")),
     tags: parseTags(formData.get("tags")?.toString() || ""),
-    author_name:
-      formData.get("author_name")?.toString() || "CVPair Editorial Team",
-    author_avatar: formData.get("author_avatar")?.toString() || "",
-    seo_title: formData.get("seo_title")?.toString() || title,
-    seo_description:
-      formData.get("seo_description")?.toString() ||
-      formData.get("excerpt")?.toString() ||
-      "",
-    canonical_url: formData.get("canonical_url")?.toString() || "",
-    focus_keyword: formData.get("focus_keyword")?.toString() || "",
+    author_name: clean(formData.get("author_name")) || "CVPair Editorial Team",
+    author_avatar: authorAvatar,
+    seo_title: clean(formData.get("seo_title")) || title,
+    seo_description: seoDescription,
+    canonical_url: canonicalUrl,
+    focus_keyword: clean(formData.get("focus_keyword")),
     reading_time: estimateReadingTime(contentBlocks),
     status,
-    published_at: status === "published" ? new Date().toISOString() : null,
+    // published_at is set by the create/update actions, not here
   };
 }
 
@@ -139,6 +254,8 @@ export async function createBlogPost(formData) {
   await requireAdmin();
   const supabase = createAdminSupabaseClient();
   const payload = postPayload(formData);
+  payload.published_at =
+    payload.status === "published" ? new Date().toISOString() : null;
 
   const { error } = await supabase.from("blog_posts").insert(payload);
   if (error) throw error;
@@ -154,6 +271,18 @@ export async function updateBlogPost(id, formData) {
   const supabase = createAdminSupabaseClient();
   const payload = postPayload(formData);
 
+  // Keep the original publish date; only set it on first publish
+  const { data: existing } = await supabase
+    .from("blog_posts")
+    .select("slug, published_at")
+    .eq("id", id)
+    .single();
+
+  payload.published_at =
+    payload.status === "published"
+      ? (existing?.published_at ?? new Date().toISOString())
+      : null;
+
   const { error } = await supabase
     .from("blog_posts")
     .update(payload)
@@ -162,11 +291,13 @@ export async function updateBlogPost(id, formData) {
 
   revalidatePath("/blog");
   revalidatePath(`/blog/${payload.slug}`);
+  if (existing?.slug && existing.slug !== payload.slug) {
+    revalidatePath(`/blog/${existing.slug}`);
+  }
   revalidatePath("/admin/blog");
   revalidatePath("/admin");
   redirect("/admin/blog");
 }
-
 export async function toggleBlogPostStatus(id, currentStatus) {
   await requireAdmin();
   const supabase = createAdminSupabaseClient();
