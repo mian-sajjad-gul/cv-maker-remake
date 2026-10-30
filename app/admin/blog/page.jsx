@@ -29,7 +29,9 @@ export default async function AdminBlogPage({ searchParams }) {
 
   const allPosts = await getAllPostsForAdmin();
 
-  const publishedCount = allPosts.filter((p) => p.status === "published").length;
+  const publishedCount = allPosts.filter(
+    (p) => p.status === "published",
+  ).length;
   const draftCount = allPosts.filter((p) => p.status === "draft").length;
 
   let filtered = allPosts;
@@ -46,7 +48,7 @@ export default async function AdminBlogPage({ searchParams }) {
         p.title?.toLowerCase().includes(q) ||
         p.slug?.toLowerCase().includes(q) ||
         p.category?.toLowerCase().includes(q) ||
-        p.focus_keyword?.toLowerCase().includes(q)
+        p.focus_keyword?.toLowerCase().includes(q),
     );
   }
 
@@ -60,7 +62,8 @@ export default async function AdminBlogPage({ searchParams }) {
               Blog Post Management
             </h1>
             <p className="mt-1 text-sm text-slate-600">
-              Create, edit, manage slugs, publish status, and configure SEO metadata.
+              Create, edit, manage slugs, publish status, and configure SEO
+              metadata.
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -96,7 +99,9 @@ export default async function AdminBlogPage({ searchParams }) {
                   <span>{tab.label}</span>
                   <span
                     className={`rounded-full px-2 py-0.2 text-[11px] ${
-                      isActive ? "bg-white/20 text-white" : "bg-slate-100 text-slate-600"
+                      isActive
+                        ? "bg-white/20 text-white"
+                        : "bg-slate-100 text-slate-600"
                     }`}
                   >
                     {tab.count}
@@ -107,7 +112,11 @@ export default async function AdminBlogPage({ searchParams }) {
           </div>
 
           {/* Search Form */}
-          <form method="GET" action="/admin/blog" className="relative max-w-sm w-full">
+          <form
+            method="GET"
+            action="/admin/blog"
+            className="relative max-w-sm w-full"
+          >
             <input type="hidden" name="tab" value={currentTab} />
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <input
@@ -164,7 +173,9 @@ export default async function AdminBlogPage({ searchParams }) {
                         >
                           <span
                             className={`h-1.5 w-1.5 rounded-full ${
-                              post.status === "published" ? "bg-emerald-500" : "bg-slate-400"
+                              post.status === "published"
+                                ? "bg-emerald-500"
+                                : "bg-slate-400"
                             }`}
                           ></span>
                           {post.status}
@@ -175,7 +186,7 @@ export default async function AdminBlogPage({ searchParams }) {
                           action={toggleBlogPostStatus.bind(
                             null,
                             post.id,
-                            post.status
+                            post.status,
                           )}
                         >
                           <button
@@ -187,7 +198,9 @@ export default async function AdminBlogPage({ searchParams }) {
                             }
                             className="rounded-lg border border-slate-200 px-2 py-0.5 text-[11px] font-semibold text-slate-600 hover:bg-slate-100 transition"
                           >
-                            {post.status === "published" ? "Unpublish" : "Publish"}
+                            {post.status === "published"
+                              ? "Unpublish"
+                              : "Publish"}
                           </button>
                         </form>
                       </div>
@@ -203,10 +216,14 @@ export default async function AdminBlogPage({ searchParams }) {
                       {post.focus_keyword ? (
                         <div className="flex items-center gap-1 text-xs font-semibold text-slate-700">
                           <Sparkles className="h-3 w-3 text-indigo-500 shrink-0" />
-                          <span className="truncate max-w-[150px]">{post.focus_keyword}</span>
+                          <span className="truncate max-w-[150px]">
+                            {post.focus_keyword}
+                          </span>
                         </div>
                       ) : (
-                        <span className="text-xs text-slate-400 italic">None set</span>
+                        <span className="text-xs text-slate-400 italic">
+                          None set
+                        </span>
                       )}
                       <p className="mt-0.5 text-[11px] text-slate-400">
                         {post.reading_time || 5} min read
@@ -215,9 +232,13 @@ export default async function AdminBlogPage({ searchParams }) {
 
                     <td className="py-4 px-4 text-xs text-slate-500 whitespace-nowrap">
                       {post.published_at ? (
-                        <span>{new Date(post.published_at).toLocaleDateString()}</span>
+                        <span>
+                          {new Date(post.published_at).toLocaleDateString()}
+                        </span>
                       ) : (
-                        <span className="italic text-slate-400">Unpublished</span>
+                        <span className="italic text-slate-400">
+                          Unpublished
+                        </span>
                       )}
                     </td>
 
@@ -258,9 +279,14 @@ export default async function AdminBlogPage({ searchParams }) {
 
                 {filtered.length === 0 && (
                   <tr>
-                    <td colSpan={6} className="py-12 text-center text-slate-500">
+                    <td
+                      colSpan={6}
+                      className="py-12 text-center text-slate-500"
+                    >
                       <FileQuestion className="mx-auto h-10 w-10 text-slate-300" />
-                      <p className="mt-2 text-sm font-bold text-slate-800">No blog posts found</p>
+                      <p className="mt-2 text-sm font-bold text-slate-800">
+                        No blog posts found
+                      </p>
                       <p className="text-xs text-slate-400">
                         {searchQuery
                           ? `No articles match your search for "${searchQuery}".`

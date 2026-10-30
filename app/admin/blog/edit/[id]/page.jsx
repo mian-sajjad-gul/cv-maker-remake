@@ -9,7 +9,8 @@ import { ArrowLeft, ExternalLink } from "lucide-react";
 
 export const metadata = {
   title: "Edit Blog Post | CVPair Admin",
-  description: "Edit article content blocks, update slug, modify SEO metadata and publication status.",
+  description:
+    "Edit article content blocks, update slug, modify SEO metadata and publication status.",
 };
 
 export default async function EditBlogPostPage({ params }) {

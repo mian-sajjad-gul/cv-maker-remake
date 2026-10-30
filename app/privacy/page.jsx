@@ -30,7 +30,6 @@ export default function PrivacyPage() {
 
       <section className="px-4 py-16">
         <div className="prose prose-slate mx-auto max-w-4xl">
-
           <h2>1. Introduction</h2>
           <p>
             Welcome to CVPair ("we", "our", or "us"). We operate the website

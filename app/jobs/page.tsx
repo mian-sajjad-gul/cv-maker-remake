@@ -1,15 +1,27 @@
+import type { Metadata } from "next";
 import Link from "next/link";
-import JobCard from "@/components/JobCard";
-import Pagination from "@/components/Pagination";
-import { CATEGORIES, JOB_TYPES, getJobs } from "@/lib/jobs";
+import JobCard from "./components/JobCard";
+import Pagination from "./components/Pagination";
+import { CATEGORIES, JOB_TYPES, getJobs } from "./lib/jobs";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Remote Jobs | CVPair",
   description:
     "Browse remote jobs from companies hiring worldwide. Search by role, category and job type, then apply directly.",
 };
 
-export default async function RemoteJobsPage({ searchParams }) {
+type SearchParams = {
+  q?: string;
+  category?: string;
+  type?: string;
+  page?: string;
+};
+
+export default async function RemoteJobsPage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
   const sp = await searchParams;
   const q = sp.q?.trim() ?? "";
   const category = sp.category ?? "";
@@ -38,7 +50,7 @@ export default async function RemoteJobsPage({ searchParams }) {
 
       {/* Plain GET form: works without JavaScript and keeps URLs shareable */}
       <form
-        action="/remote-jobs"
+        action="/jobs"
         method="get"
         className="mb-6 grid gap-3 rounded-xl border border-neutral-200 bg-neutral-50 p-4 sm:grid-cols-[1fr_180px_160px_auto]"
       >
@@ -92,7 +104,7 @@ export default async function RemoteJobsPage({ searchParams }) {
           </button>
           {hasFilters && (
             <Link
-              href="/remote-jobs"
+              href="/jobs"
               className="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium hover:border-black"
             >
               Reset
@@ -122,7 +134,7 @@ export default async function RemoteJobsPage({ searchParams }) {
           </p>
           {hasFilters && (
             <Link
-              href="/remote-jobs"
+              href="/jobs"
               className="mt-4 inline-block rounded-lg bg-black px-4 py-2 text-sm font-medium text-white"
             >
               Show all jobs

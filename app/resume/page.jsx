@@ -275,11 +275,7 @@ export default function ResumeBuilderPage() {
       <div className="no-print">
         {/* AdSense Placement 1: Responsive Leaderboard Banner */}
         <section className="mx-auto max-w-6xl px-4 pt-8">
-          <AdBlock
-            type="leaderboard"
-            slot="resume-page-mid"
-            className="my-4"
-          />
+          <AdBlock type="leaderboard" slot="resume-page-mid" className="my-4" />
         </section>
 
         {/* Semantic H1 & Introduction Article */}
@@ -295,10 +291,12 @@ export default function ResumeBuilderPage() {
             </h1>
 
             <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed max-w-4xl">
-              CVPair is a free, modern online curriculum vitae and resume builder engineered to help
-              job seekers pass Applicant Tracking Systems (ATS) and land more interviews. With 19
-              professionally designed templates, real-time live preview, instant ATS score evaluation,
-              and seamless PDF export, creating a job-winning resume has never been faster or easier.
+              CVPair is a free, modern online curriculum vitae and resume
+              builder engineered to help job seekers pass Applicant Tracking
+              Systems (ATS) and land more interviews. With 19 professionally
+              designed templates, real-time live preview, instant ATS score
+              evaluation, and seamless PDF export, creating a job-winning resume
+              has never been faster or easier.
             </p>
 
             {/* 4 Core Value Pillars */}
@@ -311,8 +309,9 @@ export default function ResumeBuilderPage() {
                   100% ATS Optimized
                 </h3>
                 <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
-                  Clean single and multi-column formatting guaranteed to pass enterprise screening
-                  bots like Workday, Greenhouse, Taleo, and Lever.
+                  Clean single and multi-column formatting guaranteed to pass
+                  enterprise screening bots like Workday, Greenhouse, Taleo, and
+                  Lever.
                 </p>
               </div>
 
@@ -324,8 +323,8 @@ export default function ResumeBuilderPage() {
                   Live Side-by-Side Preview
                 </h3>
                 <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
-                  Watch your resume format automatically in real-time as you type your experience,
-                  skills, and personal summary.
+                  Watch your resume format automatically in real-time as you
+                  type your experience, skills, and personal summary.
                 </p>
               </div>
 
@@ -337,8 +336,8 @@ export default function ResumeBuilderPage() {
                   19 Expert Templates
                 </h3>
                 <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
-                  Tailored designs for software engineers, product designers, executives, university
-                  graduates, and academic professionals.
+                  Tailored designs for software engineers, product designers,
+                  executives, university graduates, and academic professionals.
                 </p>
               </div>
 
@@ -350,8 +349,9 @@ export default function ResumeBuilderPage() {
                   No Hidden Paywalls
                 </h3>
                 <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
-                  Download high-resolution print-ready PDFs at standard A4 sizing with zero watermark
-                  restrictions or forced subscriptions.
+                  Download high-resolution print-ready PDFs at standard A4
+                  sizing with zero watermark restrictions or forced
+                  subscriptions.
                 </p>
               </div>
             </div>
@@ -369,40 +369,57 @@ export default function ResumeBuilderPage() {
                 How to Build a Job-Winning Resume in 4 Easy Steps
               </h2>
               <p className="mt-2 text-sm text-slate-600">
-                Follow our recruiter-approved blueprint to craft an interview-ready resume in under 10 minutes.
+                Follow our recruiter-approved blueprint to craft an
+                interview-ready resume in under 10 minutes.
               </p>
             </div>
 
             <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
               <div className="relative rounded-2xl border border-slate-100 bg-slate-50/50 p-6">
                 <span className="text-3xl font-black text-slate-300">01</span>
-                <h3 className="mt-3 text-base font-bold text-slate-900">Enter Details</h3>
+                <h3 className="mt-3 text-base font-bold text-slate-900">
+                  Enter Details
+                </h3>
                 <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-                  Fill in your contact information, headline, and a punchy 2-3 sentence professional summary focusing on your career accomplishments.
+                  Fill in your contact information, headline, and a punchy 2-3
+                  sentence professional summary focusing on your career
+                  accomplishments.
                 </p>
               </div>
 
               <div className="relative rounded-2xl border border-slate-100 bg-slate-50/50 p-6">
                 <span className="text-3xl font-black text-slate-300">02</span>
-                <h3 className="mt-3 text-base font-bold text-slate-900">Add Experience & Skills</h3>
+                <h3 className="mt-3 text-base font-bold text-slate-900">
+                  Add Experience & Skills
+                </h3>
                 <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-                  Input work experiences using quantifiable metric bullet points. Add relevant industry skills separated by commas with smooth typing.
+                  Input work experiences using quantifiable metric bullet
+                  points. Add relevant industry skills separated by commas with
+                  smooth typing.
                 </p>
               </div>
 
               <div className="relative rounded-2xl border border-slate-100 bg-slate-50/50 p-6">
                 <span className="text-3xl font-black text-slate-300">03</span>
-                <h3 className="mt-3 text-base font-bold text-slate-900">Choose a Template</h3>
+                <h3 className="mt-3 text-base font-bold text-slate-900">
+                  Choose a Template
+                </h3>
                 <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-                  Browse our gallery of 19 ATS-friendly templates. Change accent colors or template layouts instantly without losing any entered text.
+                  Browse our gallery of 19 ATS-friendly templates. Change accent
+                  colors or template layouts instantly without losing any
+                  entered text.
                 </p>
               </div>
 
               <div className="relative rounded-2xl border border-slate-100 bg-slate-50/50 p-6">
                 <span className="text-3xl font-black text-slate-300">04</span>
-                <h3 className="mt-3 text-base font-bold text-slate-900">Validate & Download</h3>
+                <h3 className="mt-3 text-base font-bold text-slate-900">
+                  Validate & Download
+                </h3>
                 <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-                  Check your score on the live ATS evaluator (target 7/7). Click &ldquo;Print / Save PDF&rdquo; to download your document or send it via email.
+                  Check your score on the live ATS evaluator (target 7/7). Click
+                  &ldquo;Print / Save PDF&rdquo; to download your document or
+                  send it via email.
                 </p>
               </div>
             </div>
@@ -417,19 +434,23 @@ export default function ResumeBuilderPage() {
                 Industry Insights & Optimization
               </span>
               <h2 className="mt-2 text-2xl sm:text-3xl font-black tracking-tight text-slate-900">
-                What is an Applicant Tracking System (ATS) and Why Does It Matter?
+                What is an Applicant Tracking System (ATS) and Why Does It
+                Matter?
               </h2>
               <div className="mt-4 space-y-4 text-sm sm:text-base text-slate-700 leading-relaxed">
                 <p>
-                  Over <strong>98% of Fortune 500 companies</strong> and more than 75% of mid-sized
-                  organizations utilize Applicant Tracking Systems (ATS) to manage incoming job applications.
-                  Before any human hiring manager or recruiter reads your resume, automated software algorithms
-                  parse the raw document, categorize your skills, and rank you against target job descriptions.
+                  Over <strong>98% of Fortune 500 companies</strong> and more
+                  than 75% of mid-sized organizations utilize Applicant Tracking
+                  Systems (ATS) to manage incoming job applications. Before any
+                  human hiring manager or recruiter reads your resume, automated
+                  software algorithms parse the raw document, categorize your
+                  skills, and rank you against target job descriptions.
                 </p>
                 <p>
-                  Unfortunately, millions of qualified candidates are automatically rejected simply because of
-                  unparseable formatting: complex multi-nested tables, unreadable graphics, missing standard
-                  section headings, or non-standard fonts.
+                  Unfortunately, millions of qualified candidates are
+                  automatically rejected simply because of unparseable
+                  formatting: complex multi-nested tables, unreadable graphics,
+                  missing standard section headings, or non-standard fonts.
                 </p>
                 <h3 className="text-lg font-bold text-slate-900 pt-2">
                   How CVPair Solves the ATS Parsing Challenge:
@@ -437,19 +458,35 @@ export default function ResumeBuilderPage() {
                 <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 pt-1 text-xs sm:text-sm text-slate-600">
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span><strong>Standard Section Headings:</strong> Uses universal naming (Summary, Skills, Experience, Education) recognized by all major ATS parsers.</span>
+                    <span>
+                      <strong>Standard Section Headings:</strong> Uses universal
+                      naming (Summary, Skills, Experience, Education) recognized
+                      by all major ATS parsers.
+                    </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span><strong>Machine-Readable Fonts:</strong> Formatted with system fonts and high contrast ratios ensuring flawless optical character reading.</span>
+                    <span>
+                      <strong>Machine-Readable Fonts:</strong> Formatted with
+                      system fonts and high contrast ratios ensuring flawless
+                      optical character reading.
+                    </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span><strong>No Header/Footer Confusion:</strong> Personal details and contact information are placed directly in the main stream to prevent truncation.</span>
+                    <span>
+                      <strong>No Header/Footer Confusion:</strong> Personal
+                      details and contact information are placed directly in the
+                      main stream to prevent truncation.
+                    </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span><strong>Direct PDF Output:</strong> High-fidelity vector PDF print styling that preserves selectable text layers and searchability.</span>
+                    <span>
+                      <strong>Direct PDF Output:</strong> High-fidelity vector
+                      PDF print styling that preserves selectable text layers
+                      and searchability.
+                    </span>
                   </li>
                 </ul>
               </div>
@@ -459,11 +496,7 @@ export default function ResumeBuilderPage() {
 
         {/* AdSense Placement 2: Mid-Content Responsive Native Banner */}
         <section className="mx-auto max-w-6xl px-4 py-4">
-          <AdBlock
-            type="native"
-            slot="resume-page-content"
-            className="my-2"
-          />
+          <AdBlock type="native" slot="resume-page-content" className="my-2" />
         </section>
 
         {/* Template Directory & Deep-Linking Showcase */}
@@ -478,7 +511,8 @@ export default function ResumeBuilderPage() {
                   19 Resume Templates Tailored for Every Industry
                 </h2>
                 <p className="mt-1 text-sm text-slate-600">
-                  Select any template below to automatically preview your CV in that layout.
+                  Select any template below to automatically preview your CV in
+                  that layout.
                 </p>
               </div>
             </div>
@@ -524,7 +558,8 @@ export default function ResumeBuilderPage() {
                 Frequently Asked Questions About Resume Building
               </h2>
               <p className="mt-2 text-sm text-slate-600">
-                Everything you need to know about ATS optimization, formatting, downloading, and privacy.
+                Everything you need to know about ATS optimization, formatting,
+                downloading, and privacy.
               </p>
             </div>
 
@@ -558,7 +593,8 @@ export default function ResumeBuilderPage() {
               Ready to create your interview-winning resume?
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-sm sm:text-base text-slate-400">
-              Join thousands of job seekers who landed interviews with CVPair. 100% free, fast, and ATS-optimized.
+              Join thousands of job seekers who landed interviews with CVPair.
+              100% free, fast, and ATS-optimized.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
               <a

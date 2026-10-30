@@ -24,7 +24,8 @@ import {
 
 export const metadata = {
   title: "Comment Moderation & Threaded Replies | CVPair Admin",
-  description: "Moderate blog comments, handle spam, and manage nested replies.",
+  description:
+    "Moderate blog comments, handle spam, and manage nested replies.",
 };
 
 export default async function AdminCommentsPage({ searchParams }) {
@@ -37,12 +38,16 @@ export default async function AdminCommentsPage({ searchParams }) {
   const allComments = await getAllCommentsForAdmin("all");
 
   const pendingCount = allComments.filter((c) => c.status === "pending").length;
-  const approvedCount = allComments.filter((c) => c.status === "approved").length;
+  const approvedCount = allComments.filter(
+    (c) => c.status === "approved",
+  ).length;
   const spamCount = allComments.filter((c) => c.status === "spam").length;
 
   let displayedComments = allComments;
   if (currentTab !== "all") {
-    displayedComments = displayedComments.filter((c) => c.status === currentTab);
+    displayedComments = displayedComments.filter(
+      (c) => c.status === currentTab,
+    );
   }
 
   if (searchQuery.trim()) {
@@ -52,7 +57,7 @@ export default async function AdminCommentsPage({ searchParams }) {
         c.author_name?.toLowerCase().includes(q) ||
         c.author_email?.toLowerCase().includes(q) ||
         c.content?.toLowerCase().includes(q) ||
-        c.post_slug?.toLowerCase().includes(q)
+        c.post_slug?.toLowerCase().includes(q),
     );
   }
 
@@ -77,7 +82,8 @@ export default async function AdminCommentsPage({ searchParams }) {
               )}
             </div>
             <p className="mt-1 text-sm text-slate-600">
-              Audit submitted comments, approve verified thoughts, filter spam, and publish official nested replies.
+              Audit submitted comments, approve verified thoughts, filter spam,
+              and publish official nested replies.
             </p>
           </div>
         </div>
@@ -113,8 +119,8 @@ export default async function AdminCommentsPage({ searchParams }) {
                       isActive
                         ? "bg-white/20 text-white"
                         : tab.highlight
-                        ? "bg-amber-100 text-amber-800 font-black"
-                        : "bg-slate-100 text-slate-600"
+                          ? "bg-amber-100 text-amber-800 font-black"
+                          : "bg-slate-100 text-slate-600"
                     }`}
                   >
                     {tab.count}
@@ -125,7 +131,11 @@ export default async function AdminCommentsPage({ searchParams }) {
           </div>
 
           {/* Search Form */}
-          <form method="GET" action="/admin/comments" className="relative max-w-sm w-full">
+          <form
+            method="GET"
+            action="/admin/comments"
+            className="relative max-w-sm w-full"
+          >
             <input type="hidden" name="tab" value={currentTab} />
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <input
@@ -143,7 +153,9 @@ export default async function AdminCommentsPage({ searchParams }) {
           {displayedComments.length === 0 ? (
             <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center">
               <MessageSquare className="mx-auto h-12 w-12 text-slate-300" />
-              <h3 className="mt-3 text-base font-bold text-slate-800">No comments found</h3>
+              <h3 className="mt-3 text-base font-bold text-slate-800">
+                No comments found
+              </h3>
               <p className="mt-1 text-xs sm:text-sm text-slate-500">
                 {searchQuery
                   ? `No comments matched your search for "${searchQuery}".`
@@ -171,8 +183,8 @@ export default async function AdminCommentsPage({ searchParams }) {
                     comment.status === "pending"
                       ? "border-amber-200 ring-1 ring-amber-100"
                       : comment.status === "spam"
-                      ? "border-red-200 bg-red-50/10 opacity-75"
-                      : "border-slate-200"
+                        ? "border-red-200 bg-red-50/10 opacity-75"
+                        : "border-slate-200"
                   }`}
                 >
                   <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
@@ -213,8 +225,8 @@ export default async function AdminCommentsPage({ searchParams }) {
                               comment.status === "approved"
                                 ? "bg-emerald-100 text-emerald-800"
                                 : comment.status === "pending"
-                                ? "bg-amber-100 text-amber-800"
-                                : "bg-red-100 text-red-800"
+                                  ? "bg-amber-100 text-amber-800"
+                                  : "bg-red-100 text-red-800"
                             }`}
                           >
                             {comment.status}
@@ -233,7 +245,10 @@ export default async function AdminCommentsPage({ searchParams }) {
                             <ExternalLink className="h-3 w-3" />
                           </Link>
                           <span>·</span>
-                          <time dateTime={comment.created_at} className="text-slate-400">
+                          <time
+                            dateTime={comment.created_at}
+                            className="text-slate-400"
+                          >
                             {new Date(comment.created_at).toLocaleString()}
                           </time>
                         </div>
@@ -248,7 +263,7 @@ export default async function AdminCommentsPage({ searchParams }) {
                             null,
                             comment.id,
                             "approved",
-                            comment.post_slug
+                            comment.post_slug,
                           )}
                         >
                           <button
@@ -268,7 +283,7 @@ export default async function AdminCommentsPage({ searchParams }) {
                             null,
                             comment.id,
                             "spam",
-                            comment.post_slug
+                            comment.post_slug,
                           )}
                         >
                           <button
@@ -288,7 +303,7 @@ export default async function AdminCommentsPage({ searchParams }) {
                             null,
                             comment.id,
                             "pending",
-                            comment.post_slug
+                            comment.post_slug,
                           )}
                         >
                           <button
@@ -297,7 +312,9 @@ export default async function AdminCommentsPage({ searchParams }) {
                             className="inline-flex items-center gap-1 rounded-xl border border-slate-200 px-2.5 py-1.5 text-xs font-bold text-slate-600 hover:bg-slate-50 transition"
                           >
                             <Clock className="h-3.5 w-3.5 text-slate-400" />
-                            <span className="hidden sm:inline">Set Pending</span>
+                            <span className="hidden sm:inline">
+                              Set Pending
+                            </span>
                           </button>
                         </form>
                       )}
@@ -306,7 +323,7 @@ export default async function AdminCommentsPage({ searchParams }) {
                         action={deleteCommentAction.bind(
                           null,
                           comment.id,
-                          comment.post_slug
+                          comment.post_slug,
                         )}
                       >
                         <button
@@ -348,16 +365,29 @@ export default async function AdminCommentsPage({ searchParams }) {
                       action={adminReplyToCommentAction}
                       className="mt-3 p-4 rounded-xl border border-indigo-100 bg-indigo-50/30 space-y-3"
                     >
-                      <input type="hidden" name="parent_id" value={comment.id} />
-                      <input type="hidden" name="post_slug" value={comment.post_slug} />
-                      <input type="hidden" name="post_id" value={comment.post_id || ""} />
+                      <input
+                        type="hidden"
+                        name="parent_id"
+                        value={comment.id}
+                      />
+                      <input
+                        type="hidden"
+                        name="post_slug"
+                        value={comment.post_slug}
+                      />
+                      <input
+                        type="hidden"
+                        name="post_id"
+                        value={comment.post_id || ""}
+                      />
 
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold uppercase tracking-wider text-indigo-900">
                           Official Reply as Editorial Staff
                         </span>
                         <span className="text-[11px] text-slate-500">
-                          Will be auto-approved and threaded under {comment.author_name}
+                          Will be auto-approved and threaded under{" "}
+                          {comment.author_name}
                         </span>
                       </div>
 

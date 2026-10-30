@@ -30,13 +30,11 @@ export default function TermsPage() {
 
       <section className="px-4 py-16">
         <div className="prose prose-slate mx-auto max-w-4xl">
-
           <h2>1. Acceptance of Terms</h2>
           <p>
             By accessing or using CVPair at cvpair.com ("the Service"), you
-            agree to be bound by these Terms of Service ("Terms"). If you
-            do not agree with any part of these Terms, you must not use the
-            Service.
+            agree to be bound by these Terms of Service ("Terms"). If you do not
+            agree with any part of these Terms, you must not use the Service.
           </p>
 
           <h2>2. Description of Service</h2>
@@ -104,8 +102,8 @@ export default function TermsPage() {
 
           <h2>8. Third-Party Links</h2>
           <p>
-            The Service may contain links to third-party websites. CVPair has
-            no control over these sites and accepts no responsibility for their
+            The Service may contain links to third-party websites. CVPair has no
+            control over these sites and accepts no responsibility for their
             content or practices. Access to third-party sites is at your own
             risk.
           </p>
@@ -134,16 +132,16 @@ export default function TermsPage() {
 
           <h2>11. Indemnification</h2>
           <p>
-            You agree to indemnify and hold harmless CVPair, its affiliates,
-            and its team members from any claims, damages, losses, or expenses
+            You agree to indemnify and hold harmless CVPair, its affiliates, and
+            its team members from any claims, damages, losses, or expenses
             (including legal fees) arising from your use of the Service or
             violation of these Terms.
           </p>
 
           <h2>12. Modifications to Terms</h2>
           <p>
-            We reserve the right to modify these Terms at any time. Changes
-            will be effective upon posting to the website. Continued use of the
+            We reserve the right to modify these Terms at any time. Changes will
+            be effective upon posting to the website. Continued use of the
             Service after changes constitutes your acceptance of the revised
             Terms.
           </p>

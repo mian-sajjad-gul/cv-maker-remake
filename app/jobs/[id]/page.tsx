@@ -1,10 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import CompanyLogo from "@/components/CompanyLogo";
-import { formatSalary, timeAgo } from "@/lib/format";
-import { getJobById } from "@/lib/jobs";
+import CompanyLogo from "../components/CompanyLogo";
+import { formatSalary, timeAgo } from "../lib/format";
+import { getJobById } from "../lib/jobs";
 
-export async function generateMetadata({ params }) {
+type Props = { params: Promise<{ id: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const job = await getJobById(id);
   if (!job) return { title: "Job not found | CVPair" };
@@ -15,7 +18,7 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default async function JobDetailPage({ params }) {
+export default async function JobDetailPage({ params }: Props) {
   const { id } = await params;
   const job = await getJobById(id);
   if (!job) notFound();

@@ -35,14 +35,17 @@ export const metadata = {
 export default async function AdminDashboardPage() {
   await requireAdmin();
 
-  const [stats, recentPosts, pendingComments, recentMessages] = await Promise.all([
-    getAdminDashboardStats(),
-    getAllPostsForAdmin(),
-    getAllCommentsForAdmin("pending"),
-    getContactMessagesForAdmin("all"),
-  ]);
+  const [stats, recentPosts, pendingComments, recentMessages] =
+    await Promise.all([
+      getAdminDashboardStats(),
+      getAllPostsForAdmin(),
+      getAllCommentsForAdmin("pending"),
+      getContactMessagesForAdmin("all"),
+    ]);
 
-  const unreadMessages = recentMessages.filter((m) => !m.is_read || m.status === "unread");
+  const unreadMessages = recentMessages.filter(
+    (m) => !m.is_read || m.status === "unread",
+  );
 
   return (
     <AdminLayout activeTab="overview">
@@ -54,7 +57,8 @@ export default async function AdminDashboardPage() {
               Administrative Control Dashboard
             </h1>
             <p className="mt-1 text-sm text-slate-600">
-              Manage content, review community discussions, and handle user inquiries.
+              Manage content, review community discussions, and handle user
+              inquiries.
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -81,13 +85,17 @@ export default async function AdminDashboardPage() {
                   You have{" "}
                   {stats.comments.pending > 0 && (
                     <strong className="underline underline-offset-2">
-                      {stats.comments.pending} pending comment{stats.comments.pending > 1 ? "s" : ""}
+                      {stats.comments.pending} pending comment
+                      {stats.comments.pending > 1 ? "s" : ""}
                     </strong>
                   )}
-                  {stats.comments.pending > 0 && stats.messages.unread > 0 && " and "}
+                  {stats.comments.pending > 0 &&
+                    stats.messages.unread > 0 &&
+                    " and "}
                   {stats.messages.unread > 0 && (
                     <strong className="underline underline-offset-2">
-                      {stats.messages.unread} unread contact message{stats.messages.unread > 1 ? "s" : ""}
+                      {stats.messages.unread} unread contact message
+                      {stats.messages.unread > 1 ? "s" : ""}
                     </strong>
                   )}{" "}
                   waiting in the moderation queues.
@@ -131,7 +139,9 @@ export default async function AdminDashboardPage() {
               <span className="text-3xl font-black text-slate-900">
                 {stats.posts.total}
               </span>
-              <span className="text-xs text-slate-500 font-medium">total articles</span>
+              <span className="text-xs text-slate-500 font-medium">
+                total articles
+              </span>
             </div>
             <div className="mt-4 flex items-center gap-3 border-t border-slate-100 pt-3 text-xs text-slate-600">
               <span className="flex items-center gap-1.5 font-semibold text-emerald-700">
@@ -166,7 +176,9 @@ export default async function AdminDashboardPage() {
               <span className="text-3xl font-black text-slate-900">
                 {stats.comments.total}
               </span>
-              <span className="text-xs text-slate-500 font-medium">total comments</span>
+              <span className="text-xs text-slate-500 font-medium">
+                total comments
+              </span>
             </div>
             <div className="mt-4 flex items-center gap-3 border-t border-slate-100 pt-3 text-xs">
               <span className="flex items-center gap-1.5 font-bold text-amber-700">
@@ -201,7 +213,9 @@ export default async function AdminDashboardPage() {
               <span className="text-3xl font-black text-slate-900">
                 {stats.messages.total}
               </span>
-              <span className="text-xs text-slate-500 font-medium">inbound inquiries</span>
+              <span className="text-xs text-slate-500 font-medium">
+                inbound inquiries
+              </span>
             </div>
             <div className="mt-4 flex items-center gap-3 border-t border-slate-100 pt-3 text-xs">
               <span className="flex items-center gap-1.5 font-bold text-blue-700">
@@ -249,12 +263,19 @@ export default async function AdminDashboardPage() {
               {pendingComments.length === 0 ? (
                 <div className="p-8 text-center">
                   <ShieldCheck className="mx-auto h-8 w-8 text-emerald-500" />
-                  <p className="mt-2 text-sm font-bold text-slate-900">All comments moderated!</p>
-                  <p className="text-xs text-slate-500">There are no pending submissions right now.</p>
+                  <p className="mt-2 text-sm font-bold text-slate-900">
+                    All comments moderated!
+                  </p>
+                  <p className="text-xs text-slate-500">
+                    There are no pending submissions right now.
+                  </p>
                 </div>
               ) : (
                 pendingComments.slice(0, 4).map((comment) => (
-                  <div key={comment.id} className="p-4 hover:bg-slate-50/60 transition">
+                  <div
+                    key={comment.id}
+                    className="p-4 hover:bg-slate-50/60 transition"
+                  >
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <div className="flex items-center gap-2">
@@ -266,7 +287,10 @@ export default async function AdminDashboardPage() {
                           </span>
                         </div>
                         <p className="text-xs font-medium text-slate-500 mt-0.5">
-                          On post: <strong className="text-slate-700">/{comment.post_slug}</strong>
+                          On post:{" "}
+                          <strong className="text-slate-700">
+                            /{comment.post_slug}
+                          </strong>
                         </p>
                       </div>
                       <span className="text-[11px] text-slate-400">
@@ -285,7 +309,7 @@ export default async function AdminDashboardPage() {
                             null,
                             comment.id,
                             "approved",
-                            comment.post_slug
+                            comment.post_slug,
                           )}
                         >
                           <button
@@ -300,7 +324,7 @@ export default async function AdminDashboardPage() {
                             null,
                             comment.id,
                             "spam",
-                            comment.post_slug
+                            comment.post_slug,
                           )}
                         >
                           <button
@@ -350,15 +374,21 @@ export default async function AdminDashboardPage() {
               {recentMessages.length === 0 ? (
                 <div className="p-8 text-center">
                   <Inbox className="mx-auto h-8 w-8 text-slate-400" />
-                  <p className="mt-2 text-sm font-bold text-slate-900">Inbox is empty</p>
-                  <p className="text-xs text-slate-500">Contact submissions will appear here.</p>
+                  <p className="mt-2 text-sm font-bold text-slate-900">
+                    Inbox is empty
+                  </p>
+                  <p className="text-xs text-slate-500">
+                    Contact submissions will appear here.
+                  </p>
                 </div>
               ) : (
                 recentMessages.slice(0, 4).map((msg) => (
                   <div
                     key={msg.id}
                     className={`p-4 transition ${
-                      !msg.is_read ? "bg-blue-50/30 font-medium" : "hover:bg-slate-50/60"
+                      !msg.is_read
+                        ? "bg-blue-50/30 font-medium"
+                        : "hover:bg-slate-50/60"
                     }`}
                   >
                     <div className="flex items-start justify-between gap-3">
@@ -369,7 +399,9 @@ export default async function AdminDashboardPage() {
                             title="Unread"
                           ></span>
                         )}
-                        <span className="text-sm font-bold text-slate-900">{msg.name}</span>
+                        <span className="text-sm font-bold text-slate-900">
+                          {msg.name}
+                        </span>
                         <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-600">
                           {msg.category}
                         </span>
@@ -392,11 +424,15 @@ export default async function AdminDashboardPage() {
                           msg.status === "replied"
                             ? "text-emerald-600"
                             : !msg.is_read
-                            ? "text-blue-600"
-                            : "text-slate-500"
+                              ? "text-blue-600"
+                              : "text-slate-500"
                         }`}
                       >
-                        {msg.status === "replied" ? "✓ Replied" : !msg.is_read ? "• Unread" : "Seen"}
+                        {msg.status === "replied"
+                          ? "✓ Replied"
+                          : !msg.is_read
+                            ? "• Unread"
+                            : "Seen"}
                       </span>
                       <Link
                         href={`/admin/inbox?id=${msg.id}`}
@@ -465,14 +501,18 @@ export default async function AdminDashboardPage() {
                       >
                         <span
                           className={`h-1.5 w-1.5 rounded-full ${
-                            post.status === "published" ? "bg-emerald-500" : "bg-slate-400"
+                            post.status === "published"
+                              ? "bg-emerald-500"
+                              : "bg-slate-400"
                           }`}
                         ></span>
                         {post.status}
                       </span>
                     </td>
                     <td className="py-3 px-4 text-xs text-slate-600">
-                      {post.focus_keyword || <span className="text-slate-400 italic">None set</span>}
+                      {post.focus_keyword || (
+                        <span className="text-slate-400 italic">None set</span>
+                      )}
                     </td>
                     <td className="py-3 px-4 text-right">
                       <div className="flex items-center justify-end gap-2">

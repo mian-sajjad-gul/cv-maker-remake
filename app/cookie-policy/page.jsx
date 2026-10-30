@@ -30,7 +30,6 @@ export default function CookiePolicyPage() {
 
       <section className="px-4 py-16">
         <div className="prose prose-slate mx-auto max-w-4xl">
-
           <h2>1. What Are Cookies?</h2>
           <p>
             Cookies are small text files stored on your device (computer,
@@ -41,7 +40,10 @@ export default function CookiePolicyPage() {
           </p>
 
           <h2>2. How CVPair Uses Cookies</h2>
-          <p>CVPair uses cookies and similar technologies for the following purposes:</p>
+          <p>
+            CVPair uses cookies and similar technologies for the following
+            purposes:
+          </p>
 
           <h3>Essential Cookies</h3>
           <p>
@@ -92,8 +94,8 @@ export default function CookiePolicyPage() {
 
           <h2>4. Third-Party Cookies</h2>
           <p>
-            Third-party services used by CVPair may set their own cookies.
-            These include:
+            Third-party services used by CVPair may set their own cookies. These
+            include:
           </p>
           <ul>
             <li>
@@ -194,8 +196,7 @@ export default function CookiePolicyPage() {
 
           <h2>8. Contact</h2>
           <p>
-            If you have questions about our use of cookies, please contact us
-            at{" "}
+            If you have questions about our use of cookies, please contact us at{" "}
             <a href="mailto:privacy@cvpair.com">privacy@cvpair.com</a>.
           </p>
         </div>

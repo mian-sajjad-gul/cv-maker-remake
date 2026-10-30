@@ -7,7 +7,8 @@ import { ArrowLeft } from "lucide-react";
 
 export const metadata = {
   title: "Create New Blog Post | CVPair Admin",
-  description: "Compose, configure SEO metadata, and publish a new resume guide or career article.",
+  description:
+    "Compose, configure SEO metadata, and publish a new resume guide or career article.",
 };
 
 export default async function NewBlogPostPage() {
@@ -31,7 +32,8 @@ export default async function NewBlogPostPage() {
             Create Blog Post
           </h1>
           <p className="mt-1 text-sm text-slate-600">
-            Write content blocks, auto-generate slug, and define ATS & SEO focus keywords.
+            Write content blocks, auto-generate slug, and define ATS & SEO focus
+            keywords.
           </p>
         </div>
 

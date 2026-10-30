@@ -26,7 +26,8 @@ import {
 
 export const metadata = {
   title: "Inbox & Inquiries | CVPair Admin",
-  description: "Centralized message viewer, read/unread tracking, and email reply dispatch.",
+  description:
+    "Centralized message viewer, read/unread tracking, and email reply dispatch.",
 };
 
 export default async function AdminInboxPage({ searchParams }) {
@@ -39,9 +40,13 @@ export default async function AdminInboxPage({ searchParams }) {
 
   const allMessages = await getContactMessagesForAdmin("all");
 
-  const unreadCount = allMessages.filter((m) => !m.is_read || m.status === "unread").length;
+  const unreadCount = allMessages.filter(
+    (m) => !m.is_read || m.status === "unread",
+  ).length;
   const repliedCount = allMessages.filter((m) => m.status === "replied").length;
-  const archivedCount = allMessages.filter((m) => m.status === "archived").length;
+  const archivedCount = allMessages.filter(
+    (m) => m.status === "archived",
+  ).length;
 
   let filtered = allMessages;
   if (currentTab === "unread") {
@@ -62,7 +67,7 @@ export default async function AdminInboxPage({ searchParams }) {
         m.email?.toLowerCase().includes(q) ||
         m.subject?.toLowerCase().includes(q) ||
         m.message?.toLowerCase().includes(q) ||
-        m.category?.toLowerCase().includes(q)
+        m.category?.toLowerCase().includes(q),
     );
   }
 
@@ -90,7 +95,8 @@ export default async function AdminInboxPage({ searchParams }) {
               )}
             </div>
             <p className="mt-1 text-sm text-slate-600">
-              Manage user inquiries, technical support questions, feedback, and dispatch direct administrative email replies.
+              Manage user inquiries, technical support questions, feedback, and
+              dispatch direct administrative email replies.
             </p>
           </div>
         </div>
@@ -126,8 +132,8 @@ export default async function AdminInboxPage({ searchParams }) {
                       isActive
                         ? "bg-white/20 text-white"
                         : tab.highlight
-                        ? "bg-blue-100 text-blue-800 font-black"
-                        : "bg-slate-100 text-slate-600"
+                          ? "bg-blue-100 text-blue-800 font-black"
+                          : "bg-slate-100 text-slate-600"
                     }`}
                   >
                     {tab.count}
@@ -138,7 +144,11 @@ export default async function AdminInboxPage({ searchParams }) {
           </div>
 
           {/* Search Form */}
-          <form method="GET" action="/admin/inbox" className="relative max-w-sm w-full">
+          <form
+            method="GET"
+            action="/admin/inbox"
+            className="relative max-w-sm w-full"
+          >
             <input type="hidden" name="tab" value={currentTab} />
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <input
@@ -159,14 +169,18 @@ export default async function AdminInboxPage({ searchParams }) {
               <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
                 Inbound Inquiries ({filtered.length})
               </span>
-              <span className="text-[11px] text-slate-400">Sorted by newest</span>
+              <span className="text-[11px] text-slate-400">
+                Sorted by newest
+              </span>
             </div>
 
             <div className="divide-y divide-slate-100 max-h-[720px] overflow-y-auto">
               {filtered.length === 0 ? (
                 <div className="p-8 text-center">
                   <Inbox className="mx-auto h-10 w-10 text-slate-300" />
-                  <p className="mt-2 text-sm font-bold text-slate-800">No messages found</p>
+                  <p className="mt-2 text-sm font-bold text-slate-800">
+                    No messages found
+                  </p>
                   <p className="text-xs text-slate-500">
                     {searchQuery
                       ? `No inquiries match "${searchQuery}".`
@@ -186,8 +200,8 @@ export default async function AdminInboxPage({ searchParams }) {
                         isSelected
                           ? "bg-indigo-50/60 border-l-4 border-indigo-600"
                           : isUnread
-                          ? "bg-blue-50/20 hover:bg-blue-50/40"
-                          : "hover:bg-slate-50/70"
+                            ? "bg-blue-50/20 hover:bg-blue-50/40"
+                            : "hover:bg-slate-50/70"
                       }`}
                     >
                       <div className="flex items-center justify-between gap-2">
@@ -198,13 +212,13 @@ export default async function AdminInboxPage({ searchParams }) {
                               title="Unread"
                             ></span>
                           ) : (
-                            <span
-                              className="h-2 w-2 rounded-full bg-transparent shrink-0"
-                            ></span>
+                            <span className="h-2 w-2 rounded-full bg-transparent shrink-0"></span>
                           )}
                           <span
                             className={`truncate text-sm ${
-                              isUnread ? "font-black text-slate-900" : "font-semibold text-slate-700"
+                              isUnread
+                                ? "font-black text-slate-900"
+                                : "font-semibold text-slate-700"
                             }`}
                           >
                             {msg.name}
@@ -220,7 +234,9 @@ export default async function AdminInboxPage({ searchParams }) {
 
                       <p
                         className={`mt-1 text-xs truncate ${
-                          isUnread ? "font-bold text-slate-900" : "text-slate-800"
+                          isUnread
+                            ? "font-bold text-slate-900"
+                            : "text-slate-800"
                         }`}
                       >
                         {msg.subject}
@@ -240,17 +256,17 @@ export default async function AdminInboxPage({ searchParams }) {
                             msg.status === "replied"
                               ? "text-emerald-600"
                               : isUnread
-                              ? "text-blue-600"
-                              : "text-slate-400"
+                                ? "text-blue-600"
+                                : "text-slate-400"
                           }`}
                         >
                           {msg.status === "replied"
                             ? "✓ Replied"
                             : isUnread
-                            ? "• Unread"
-                            : msg.status === "archived"
-                            ? "Archived"
-                            : "Seen"}
+                              ? "• Unread"
+                              : msg.status === "archived"
+                                ? "Archived"
+                                : "Seen"}
                         </span>
                       </div>
                     </Link>
@@ -294,12 +310,16 @@ export default async function AdminInboxPage({ searchParams }) {
                         action={toggleMessageReadAction.bind(
                           null,
                           activeMessage.id,
-                          activeMessage.is_read
+                          activeMessage.is_read,
                         )}
                       >
                         <button
                           type="submit"
-                          title={activeMessage.is_read ? "Mark as Unread" : "Mark as Read"}
+                          title={
+                            activeMessage.is_read
+                              ? "Mark as Unread"
+                              : "Mark as Read"
+                          }
                           className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition"
                         >
                           {activeMessage.is_read ? (
@@ -321,7 +341,7 @@ export default async function AdminInboxPage({ searchParams }) {
                           action={updateMessageStatusAction.bind(
                             null,
                             activeMessage.id,
-                            "archived"
+                            "archived",
                           )}
                         >
                           <button
@@ -338,7 +358,7 @@ export default async function AdminInboxPage({ searchParams }) {
                           action={updateMessageStatusAction.bind(
                             null,
                             activeMessage.id,
-                            "read"
+                            "read",
                           )}
                         >
                           <button
@@ -352,7 +372,10 @@ export default async function AdminInboxPage({ searchParams }) {
                       )}
 
                       <form
-                        action={deleteContactMessageAction.bind(null, activeMessage.id)}
+                        action={deleteContactMessageAction.bind(
+                          null,
+                          activeMessage.id,
+                        )}
                       >
                         <button
                           type="submit"
@@ -386,14 +409,21 @@ export default async function AdminInboxPage({ searchParams }) {
 
                     <div className="text-right text-slate-500">
                       <div>
-                        {new Date(activeMessage.created_at).toLocaleDateString([], {
-                          weekday: "short",
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        })}
+                        {new Date(activeMessage.created_at).toLocaleDateString(
+                          [],
+                          {
+                            weekday: "short",
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          },
+                        )}
                       </div>
-                      <div>{new Date(activeMessage.created_at).toLocaleTimeString()}</div>
+                      <div>
+                        {new Date(
+                          activeMessage.created_at,
+                        ).toLocaleTimeString()}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -408,34 +438,46 @@ export default async function AdminInboxPage({ searchParams }) {
                   </div>
 
                   {/* Administrative Reply Dispatch History */}
-                  {activeMessage.admin_replies && activeMessage.admin_replies.length > 0 && (
-                    <div className="mt-6 border-t border-slate-100 pt-5">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 flex items-center gap-1.5">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                        <span>Previous Administrative Responses ({activeMessage.admin_replies.length})</span>
-                      </h4>
-                      <div className="space-y-3">
-                        {activeMessage.admin_replies.map((reply, idx) => (
-                          <div
-                            key={reply.id || idx}
-                            className="rounded-2xl border border-emerald-100 bg-emerald-50/40 p-4 text-xs sm:text-sm text-slate-800"
-                          >
-                            <div className="flex items-center justify-between text-xs font-bold text-emerald-900 mb-1.5">
-                              <span>Sent by {reply.replied_by}</span>
-                              <span className="text-emerald-700 font-normal">
-                                {new Date(reply.replied_at).toLocaleString()}
-                              </span>
+                  {activeMessage.admin_replies &&
+                    activeMessage.admin_replies.length > 0 && (
+                      <div className="mt-6 border-t border-slate-100 pt-5">
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 flex items-center gap-1.5">
+                          <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                          <span>
+                            Previous Administrative Responses (
+                            {activeMessage.admin_replies.length})
+                          </span>
+                        </h4>
+                        <div className="space-y-3">
+                          {activeMessage.admin_replies.map((reply, idx) => (
+                            <div
+                              key={reply.id || idx}
+                              className="rounded-2xl border border-emerald-100 bg-emerald-50/40 p-4 text-xs sm:text-sm text-slate-800"
+                            >
+                              <div className="flex items-center justify-between text-xs font-bold text-emerald-900 mb-1.5">
+                                <span>Sent by {reply.replied_by}</span>
+                                <span className="text-emerald-700 font-normal">
+                                  {new Date(reply.replied_at).toLocaleString()}
+                                </span>
+                              </div>
+                              <p className="whitespace-pre-line text-slate-700">
+                                {reply.body}
+                              </p>
+                              <div className="mt-2 pt-2 border-t border-emerald-100/60 flex items-center justify-between text-[11px] text-emerald-800/80">
+                                <span>
+                                  Channel:{" "}
+                                  {reply.dispatched_via ||
+                                    "Automated SMTP Dispatch"}
+                                </span>
+                                <span className="font-semibold text-emerald-700">
+                                  Status: {reply.email_status || "Delivered"}
+                                </span>
+                              </div>
                             </div>
-                            <p className="whitespace-pre-line text-slate-700">{reply.body}</p>
-                            <div className="mt-2 pt-2 border-t border-emerald-100/60 flex items-center justify-between text-[11px] text-emerald-800/80">
-                              <span>Channel: {reply.dispatched_via || "Automated SMTP Dispatch"}</span>
-                              <span className="font-semibold text-emerald-700">Status: {reply.email_status || "Delivered"}</span>
-                            </div>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
                   {/* Reply Composer linked to Email Dispatcher */}
                   <div className="mt-6 border-t border-slate-100 pt-5">
@@ -447,22 +489,35 @@ export default async function AdminInboxPage({ searchParams }) {
                         </h4>
                       </div>
                       <span className="text-xs text-slate-500">
-                        To: <strong className="text-slate-700">{activeMessage.email}</strong>
+                        To:{" "}
+                        <strong className="text-slate-700">
+                          {activeMessage.email}
+                        </strong>
                       </span>
                     </div>
 
-                    <form action={dispatchAdminReplyAction} className="space-y-3">
-                      <input type="hidden" name="message_id" value={activeMessage.id} />
+                    <form
+                      action={dispatchAdminReplyAction}
+                      className="space-y-3"
+                    >
+                      <input
+                        type="hidden"
+                        name="message_id"
+                        value={activeMessage.id}
+                      />
 
                       {/* Quick Canned Template selector */}
                       <div className="flex flex-wrap items-center gap-2 text-xs">
                         <span className="font-bold text-slate-500 flex items-center gap-1">
-                          <Sparkles className="h-3 w-3 text-amber-500" /> Quick Responses:
+                          <Sparkles className="h-3 w-3 text-amber-500" /> Quick
+                          Responses:
                         </span>
                         <button
                           type="button"
                           onClick={(e) => {
-                            const textarea = e.currentTarget.form.querySelector("textarea[name='reply_body']");
+                            const textarea = e.currentTarget.form.querySelector(
+                              "textarea[name='reply_body']",
+                            );
                             if (textarea) {
                               textarea.value = `Hi ${activeMessage.name},\n\nThank you for reaching out to CVPair support! You can adjust template font scales and single-page line compactness directly from the Top Toolbar in the CV editor under the "Page Settings" dropdown.\n\nPlease let us know if you need any further assistance.\n\nBest regards,\nCVPair Support Team`;
                             }
@@ -474,7 +529,9 @@ export default async function AdminInboxPage({ searchParams }) {
                         <button
                           type="button"
                           onClick={(e) => {
-                            const textarea = e.currentTarget.form.querySelector("textarea[name='reply_body']");
+                            const textarea = e.currentTarget.form.querySelector(
+                              "textarea[name='reply_body']",
+                            );
                             if (textarea) {
                               textarea.value = `Hello ${activeMessage.name},\n\nThank you for your interest in partnering with CVPair! We are excited to support university career centers and student job seekers. Our team would love to discuss custom templates and resources for your institution.\n\nLet us know when you would be available for a brief call.\n\nWarm regards,\nCVPair Partnerships`;
                             }
@@ -486,7 +543,9 @@ export default async function AdminInboxPage({ searchParams }) {
                         <button
                           type="button"
                           onClick={(e) => {
-                            const textarea = e.currentTarget.form.querySelector("textarea[name='reply_body']");
+                            const textarea = e.currentTarget.form.querySelector(
+                              "textarea[name='reply_body']",
+                            );
                             if (textarea) {
                               textarea.value = `Hi ${activeMessage.name},\n\nThank you for getting in touch! We have verified this with our engineering team and your question has been resolved.\n\nThank you for using CVPair!\n\nBest regards,\nCVPair Team`;
                             }
@@ -530,9 +589,12 @@ export default async function AdminInboxPage({ searchParams }) {
             ) : (
               <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center">
                 <Mail className="mx-auto h-12 w-12 text-slate-300" />
-                <h3 className="mt-3 text-base font-bold text-slate-800">No message selected</h3>
+                <h3 className="mt-3 text-base font-bold text-slate-800">
+                  No message selected
+                </h3>
                 <p className="mt-1 text-xs sm:text-sm text-slate-500">
-                  Select an inquiry from the list on the left to read and dispatch replies.
+                  Select an inquiry from the list on the left to read and
+                  dispatch replies.
                 </p>
               </div>
             )}

@@ -14,7 +14,12 @@ Sincerely,
 [Your Name]`;
 
 export function CoverLetterEditor({ data, setData }) {
-  const cl = data.coverLetter || { recipientName: "", company: "", position: "", body: "" };
+  const cl = data.coverLetter || {
+    recipientName: "",
+    company: "",
+    position: "",
+    body: "",
+  };
 
   function update(key, value) {
     setData((d) => ({
@@ -31,7 +36,8 @@ export function CoverLetterEditor({ data, setData }) {
       <section className="rounded-2xl border border-blue-100 bg-blue-50 p-4">
         <h2 className="text-sm font-black text-blue-900">Cover Letter</h2>
         <p className="mt-1 text-xs leading-5 text-blue-700">
-          Tailor this for each application. Keep it to 3 short paragraphs — hiring managers spend less than 30 seconds on most cover letters.
+          Tailor this for each application. Keep it to 3 short paragraphs —
+          hiring managers spend less than 30 seconds on most cover letters.
         </p>
       </section>
 
@@ -86,7 +92,9 @@ export function CoverLetterEditor({ data, setData }) {
           <div className="rounded-xl bg-slate-50 p-6 text-sm leading-7 text-slate-800">
             {cl.recipientName || cl.company ? (
               <p className="mb-4 font-semibold">
-                {cl.recipientName ? `Dear ${cl.recipientName},` : "Dear Hiring Manager,"}
+                {cl.recipientName
+                  ? `Dear ${cl.recipientName},`
+                  : "Dear Hiring Manager,"}
               </p>
             ) : null}
             <div className="whitespace-pre-wrap">{cl.body}</div>
@@ -103,7 +111,8 @@ export function CoverLetterEditor({ data, setData }) {
 
       {/* Print tip */}
       <p className="pb-2 text-center text-xs text-slate-400">
-        Use <strong>Print / Save PDF</strong> from the toolbar — cover letter prints on a separate page after your resume.
+        Use <strong>Print / Save PDF</strong> from the toolbar — cover letter
+        prints on a separate page after your resume.
       </p>
     </div>
   );

@@ -29,7 +29,10 @@ export function Header() {
           <Link href="/#templates" className="hover:text-slate-950 transition">
             Templates
           </Link>
-          <Link href="/#how-it-works" className="hover:text-slate-950 transition">
+          <Link
+            href="/#how-it-works"
+            className="hover:text-slate-950 transition"
+          >
             How It Works
           </Link>
           <Link href="/#examples" className="hover:text-slate-950 transition">

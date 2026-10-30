@@ -30,7 +30,6 @@ export default function DisclaimerPage() {
 
       <section className="px-4 py-16">
         <div className="prose prose-slate mx-auto max-w-4xl">
-
           <h2>1. General Information Only</h2>
           <p>
             The information provided on CVPair (cvpair.com) is for general
@@ -60,8 +59,8 @@ export default function DisclaimerPage() {
 
           <h2>4. Blog and Editorial Content</h2>
           <p>
-            Articles, guides, and tips published on the CVPair blog are based
-            on general best practices and publicly available information. They
+            Articles, guides, and tips published on the CVPair blog are based on
+            general best practices and publicly available information. They
             represent the views of the authors and should not be taken as
             definitive career or legal advice. Always consult a qualified
             professional for specific career guidance.

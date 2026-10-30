@@ -20,7 +20,9 @@ function SharedResumeView() {
   if (!data) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-slate-50 p-8 text-center">
-        <h1 className="text-2xl font-black text-slate-900">Invalid share link</h1>
+        <h1 className="text-2xl font-black text-slate-900">
+          Invalid share link
+        </h1>
         <p className="text-slate-500">This link may be expired or corrupted.</p>
         <Link
           href="/resume"
@@ -58,7 +60,9 @@ function SharedResumeView() {
       <div className="bg-white border-b border-slate-200 px-4 py-4 sticky top-0 z-30 shadow-xs">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-4">
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-slate-500">Shared Resume</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-slate-500">
+              Shared Resume
+            </p>
             <h1 className="text-lg font-black text-slate-900">{name}</h1>
           </div>
           <div className="flex items-center gap-2">
@@ -103,8 +107,12 @@ function SharedResumeView() {
 
       {/* CTA footer */}
       <div className="border-t border-slate-200 bg-white py-10 text-center">
-        <p className="text-sm font-semibold text-slate-500">Liked this resume?</p>
-        <h2 className="mt-2 text-2xl font-black text-slate-900">Build yours for free with CVPair.</h2>
+        <p className="text-sm font-semibold text-slate-500">
+          Liked this resume?
+        </p>
+        <h2 className="mt-2 text-2xl font-black text-slate-900">
+          Build yours for free with CVPair.
+        </h2>
         <Link
           href="/resume"
           className="mt-5 inline-flex rounded-full bg-slate-900 px-8 py-3 text-sm font-black text-white transition hover:bg-slate-700"
