@@ -10,13 +10,12 @@ export function AdBlock({
   format = "auto",
   responsive = true,
 }) {
-  const useDummyAds = process.env.NEXT_PUBLIC_USE_DUMMY_ADS === "true";
+  const useDummyAds = process.env.NEXT_PUBLIC_USE_DUMMY_ADS === "false";
   const clientId = process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID;
   const ad = dummyAds[type] || dummyAds.rectangle;
 
   useEffect(() => {
     if (useDummyAds || !clientId) return;
-
     try {
       window.adsbygoogle = window.adsbygoogle || [];
       window.adsbygoogle.push({});
