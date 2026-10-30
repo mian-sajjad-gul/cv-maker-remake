@@ -10,12 +10,12 @@ export function AdBlock({
   format = "auto",
   responsive = true,
 }) {
-  const useDummyAds = process.env.NEXT_PUBLIC_USE_DUMMY_ADS === "false";
+  const useDummyAds = process.env.NEXT_PUBLIC_USE_DUMMY_ADS === "true";
   const clientId = process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID;
   const ad = dummyAds[type] || dummyAds.rectangle;
 
   useEffect(() => {
-    if (useDummyAds || !clientId) return;
+    if (!useDummyAds || !clientId) return;
     try {
       window.adsbygoogle = window.adsbygoogle || [];
       window.adsbygoogle.push({});
@@ -127,9 +127,9 @@ export function AdBlock({
       <p className="mb-2 text-center text-[10px] uppercase tracking-[0.2em] text-slate-400">
         Advertisement
       </p>
-
       <ins
-        className="adsbygoogle block"
+        key={pathname}
+        className="adsbygoogle"
         style={{ display: "block" }}
         data-ad-client={clientId}
         data-ad-slot={slot}

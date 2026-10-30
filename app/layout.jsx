@@ -2,7 +2,8 @@ import "./globals.css";
 import { GoogleAdSense } from "@/components/ads/GoogleAdSense";
 import { Providers } from "@/components/auth/Providers";
 import { GoogleAnalytics } from "@next/third-parties/google";
-
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 export const metadata = {
   metadataBase: new URL("https://cvpair.com"), // replace with your actual domain
   title: "CVPair — Build Your Professional CV in Minutes",
@@ -37,8 +38,10 @@ export default function RootLayout({ children }) {
     <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body suppressHydrationWarning>
         <Providers>{children}</Providers>
+        <SpeedInsights />
         <GoogleAdSense />
         <GoogleAnalytics gaId={gaId} />
+        <Analytics />
       </body>
     </html>
   );
